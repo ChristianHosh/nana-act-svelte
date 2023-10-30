@@ -59,7 +59,8 @@
 </script>
 
 <div class="dropdown">
-    <input on:keyup={searchAutocomplete} bind:value={searchValue} class="input input-bordered"
+    <input on:keyup={searchAutocomplete} bind:value={searchValue}
+           class="input input-bordered"
            placeholder={placeholderText}/>
     <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
         {#if (!loading)}
