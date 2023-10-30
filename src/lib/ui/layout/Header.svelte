@@ -1,17 +1,16 @@
 <script lang="ts">
     import {page} from "$app/stores";
-    import {enhance} from "$app/forms";
 
     const whatIsPage = () => {
         console.log($page);
     }
 </script>
 
-<header class="navbar bg-base-100 sticky top-0">
+<header class="navbar bg-base-100 sticky top-0 border-b border-b-base-content border-1">
     <div class="flex-1">
-        <h1 class="text-3xl">Nana Online</h1>
+        <h1 class="text-3xl font-bold">Nana Online</h1>
     </div>
-    {#if ($page.data.isLoggedIn)}
+    {#if ($page.data.user)}
         <div>
             <a href="/dashboard"
                class="btn btn-ghost"
