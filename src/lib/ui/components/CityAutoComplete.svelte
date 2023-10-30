@@ -18,16 +18,24 @@
     let searchTimeout: number;
 
     onMount(async () => {
+        await getCities();
+    });
+
+    const getCities = async () => {
         loading = true;
         let response = await HttpClient.get<Pageable<City>>('cities', $page.data.user);
         loading = false;
         pageable = response.data;
         cities = pageable.content;
-    });
+    }
 
     const searchAutocomplete = async () => {
         clearTimeout(searchTimeout)
 
+        if (searchValue.length === 0) {
+            await getCities()
+            return;
+        }
         if (searchValue.length < 3) return;
 
         loading = true;
@@ -61,6 +69,12 @@
                     selectCity(city);
                 }}>
                         {city.name}
+                    </button>
+                </li>
+            {:else}
+                <li>
+                    <button class="btn btn-ghost btn- justify-start align-middle" disabled>
+                        City doesn't exist
                     </button>
                 </li>
             {/each}
