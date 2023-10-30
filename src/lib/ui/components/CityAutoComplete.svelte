@@ -12,17 +12,17 @@
     let searchValue: string = '';
 
     let pageable: Pageable<City>;
-    let cityData: City[] = [];
-
-    $: filterdCities = cityData.filter(city => city.name.toLowerCase().includes(searchValue.toLowerCase()));
+    let cities: City[] = [];
+    let loading: boolean = false;
 
     let searchTimeout: number;
 
     onMount(async () => {
+        loading = true;
         let response = await HttpClient.get<Pageable<City>>('cities', $page.data.user);
-
+        loading = false;
         pageable = response.data;
-        cityData = pageable.content;
+        cities = pageable.content;
     });
 
     const searchAutocomplete = async () => {
@@ -30,15 +30,16 @@
 
         if (searchValue.length < 3) return;
 
+        loading = true;
         searchTimeout = setTimeout(async () => {
             let param = {
                 name: searchValue
             }
 
             let response = await HttpClient.get<Pageable<City>>('cities', $page.data.user, param);
-
+            loading = false
             pageable = response.data;
-            cityData = pageable.content;
+            cities = pageable.content;
         }, 500);
     }
 
@@ -53,14 +54,16 @@
     <input on:keyup={searchAutocomplete} bind:value={searchValue} class="input input-bordered"
            placeholder={placeholderText}/>
     <ul class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-        {#each filterdCities as city}
-            <li>
-                <button class="btn btn-ghost justify-start align-middle" on:click={ () => {
+        {#if (!loading)}
+            {#each cities as city}
+                <li>
+                    <button class="btn btn-ghost justify-start align-middle" on:click={ () => {
                     selectCity(city);
                 }}>
-                    {city.name}
-                </button>
-            </li>
+                        {city.name}
+                    </button>
+                </li>
+            {/each}
         {:else}
             <li>
                 <button class="btn btn-ghost btn- justify-start align-middle" disabled>
@@ -68,6 +71,7 @@
                     Loading...
                 </button>
             </li>
-        {/each}
+        {/if}
+
     </ul>
 </div>
