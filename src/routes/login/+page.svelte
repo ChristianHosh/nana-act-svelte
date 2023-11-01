@@ -1,12 +1,17 @@
 <script lang="ts">
-    import {enhance} from "$app/forms";
+    import {applyAction, enhance} from "$app/forms";
+
     export let form;
 
-    $: console.log(form);
+    let isSubmitting: boolean = false;
+
+    const submit = () => {
+        isSubmitting = true;
+    }
 </script>
 
 <svelte:head>
-    <title>Login</title>
+    <title>Nana - Login</title>
 </svelte:head>
 
 <div class="flex justify-center mt-8">
@@ -14,7 +19,17 @@
         <div class="py-4 px-8 border-1 border-b border-b-neutral-700">
             <h2 class="text-3xl">Login</h2>
         </div>
-        <form use:enhance method="post" class="flex flex-col gap-2 px-8 py-4">
+        <form method="post"
+              class="flex flex-col gap-2 px-8 py-4"
+              on:submit|preventDefault={submit}
+              use:enhance={() => {
+                  return async ({result}) => {
+                      if (result.type === 'failure')
+                          isSubmitting = false;
+
+                      await applyAction(result);
+                  }
+              }}>
             {#if (form?.errorMessage)}
                 <div class="alert alert-error w-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
@@ -52,7 +67,14 @@
                 {/if}
             </div>
 
-            <button class="btn btn-primary w-full" type="submit">Login</button>
+            <button disabled={isSubmitting} class="btn btn-primary w-full" type="submit">
+                {#if (isSubmitting)}
+                    <span class="loading loading-spinner"></span>
+                    <span>Logging In</span>
+                {:else}
+                    <span>Login</span>
+                {/if}
+            </button>
         </form>
     </div>
 </div>

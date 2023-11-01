@@ -1,8 +1,6 @@
 <script>
     import "./../app.css"
     import Header from "$lib/ui/layout/Header.svelte";
-
-    
 </script>
 
 <Header/>
