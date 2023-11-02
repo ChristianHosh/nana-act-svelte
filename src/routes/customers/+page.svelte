@@ -46,7 +46,7 @@
 </svelte:head>
 
 <div class="px-4">
-    <div class="py-4 mb-4 border-b border-b-neutral-800 border-1">
+    <div class="py-4 mb-4">
         <h1 class="text-2xl">Customers</h1>
     </div>
     <div class="mb-2 py-4 px-2 bg-neutral-content shadow shadow-black flex justify-between">
@@ -89,6 +89,7 @@
                 <th></th>
                 <th>Full Name</th>
                 <th>Handle</th>
+                <th>Phone</th>
                 <th>City</th>
                 <th>Address</th>
                 <th></th>
@@ -104,7 +105,12 @@
                         <span>{customer.fullName}</span>
                     </td>
                     <td>
-                        <span>{customer.handle}</span>
+                        <a class="link" href="https://instagram.com/{customer.handle}/" target="_blank">
+                            {customer.handle}
+                        </a>
+                    </td>
+                    <td>
+                        <span>{customer.phoneNumber}</span>
                     </td>
                     <td>
                         <span>{customer.city.name}</span>
@@ -113,6 +119,9 @@
                         <span>{customer.address}</span>
                     </td>
                     <td>
+                        <a href="/customers/{customer.id}" class="btn btn-primary btn-circle">
+                            <Icon class="text-xl" icon="mdi:account-details"/>
+                        </a>
                         <button class="btn btn-secondary btn-circle">
                             <Icon class="text-xl" icon="mdi:pencil"/>
                         </button>
