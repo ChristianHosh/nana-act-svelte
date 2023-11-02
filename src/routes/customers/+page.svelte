@@ -77,7 +77,7 @@
                 pageIndex={data.currentPage.number}
                 totalPages={data.currentPage.totalPages}
                 pageSize={2}
-                pageSizeOptions={[2,25,50]}
+                pageSizeOptions={[10,25,50]}
                 showFirstLastButtons={true}
                 on:pagechange={(event) => applySearchFilters(event)}
         />
