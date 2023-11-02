@@ -9,7 +9,6 @@
     <PageLoadingIndicator />
 {/if}
 
-
 <Header/>
 
 <div class="px-4">
