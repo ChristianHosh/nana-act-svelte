@@ -112,7 +112,7 @@
             <td>
               <span>{customer.id}</span>
             </td>
-            <td>
+            <td class="capitalize">
               <span>{customer.fullName}</span>
             </td>
             <td>
@@ -127,10 +127,10 @@
             <td>
               <span>{customer.phoneNumber}</span>
             </td>
-            <td>
+            <td class="capitalize">
               <span>{customer.city.name}</span>
             </td>
-            <td>
+            <td class="capitalize">
               <span>{customer.address}</span>
             </td>
           </tr>

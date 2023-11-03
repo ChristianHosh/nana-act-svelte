@@ -1,8 +1,7 @@
 <script lang="ts">
   import { applyAction, enhance } from "$app/forms";
-
+  import Time from "svelte-time"
   export let data;
-  export let form;
 
   let isDeleting: boolean = false;
   $: customerProfile = data.customerProfile;
@@ -15,19 +14,19 @@
 
 <div class="px-4 flex flex-col gap-4">
   <div class="py-4 mb-4">
-    <h1 class="text-2xl">{customer.fullName}</h1>
+    <h1 class="text-2xl mb-2 capitalize">{customer.fullName}</h1>
     <table class="info-table">
-      <tbody>
+      <tbody >
         <tr>
-          <td class="font-medium">Address:</td>
-          <td>{customer.city.name}, {customer.address}</td>
+          <td class="font-medium capitalize">Address:</td>
+          <td class="capitalize">{customer.city.name}, {customer.address}</td>
         </tr>
         <tr>
-          <td class="font-medium">Phone Number:</td>
+          <td class="font-medium capitalize">Phone Number:</td>
           <td>{customer.phoneNumber}</td>
         </tr>
         <tr>
-          <td class="font-medium">Handle:</td>
+          <td class="font-medium capitalize">Handle:</td>
           <td>
             <a
               class="link"
@@ -37,6 +36,14 @@
               {customer.handle}
             </a>
           </td>
+        </tr>
+        <tr>
+          <td class="font-medium capitalize">Created At:</td>
+          <td class="capitalize"><Time format="DD/MM/YYYY h:mm A" timestamp={customer.creationTimestamp}/></td>
+        </tr>
+        <tr>
+          <td class="font-medium capitalize">Updated At:</td>
+          <td class="capitalize"><Time format="DD/MM/YYYY h:mm A"  timestamp={customer.updateTimestamp}/></td>
         </tr>
       </tbody>
     </table>
