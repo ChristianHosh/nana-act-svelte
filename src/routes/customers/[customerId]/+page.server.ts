@@ -2,6 +2,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { HttpClient } from "$lib/core/api/axiosInstance";
 import type { CustomerProfile } from "$lib/core/models/customerProfile.model";
 import { AxiosError } from "axios";
+import type { Customer } from "$lib/core/models/customer.model";
 
 // @ts-ignore
 export async function load(event) {
@@ -30,7 +31,24 @@ export async function load(event) {
 // @ts-ignore
 export const actions = {
   // @ts-ignore
-  update: (event) => {},
+  update: async (event) => {
+
+  },
   // @ts-ignore
-  delete: (event) => {},
+  delete: async (event) => {
+    const formData = Object.fromEntries(await event.request.formData());
+    const customerId: number = formData.id;
+
+    try {
+      const customerResponse = await HttpClient.delete<Customer>(
+        `/customers/${customerId}`,
+        event.locals.user
+      );
+      console.log(customerResponse.data);
+    } catch (e) {
+      if (e instanceof AxiosError) return fail(e.response?.status || 500);
+      return fail(500);
+    }
+    throw redirect(307, "/customers");
+  },
 };
