@@ -1,16 +1,15 @@
 <script>
-    import "./../app.css"
-    import Header from "$lib/ui/layout/Header.svelte";
-    import {navigating} from "$app/stores";
-    import PageLoadingIndicator from "$lib/ui/components/PageLoadingIndicator.svelte";
+  import { navigating } from "$app/stores";
+  import PageLoadingIndicator from "$lib/ui/components/PageLoadingIndicator.svelte";
+  import Header from "$lib/ui/layout/Header.svelte";
 </script>
 
 {#if $navigating}
-    <PageLoadingIndicator />
+  <PageLoadingIndicator />
 {/if}
 
-<Header/>
+<Header />
 
 <div class="px-4">
-    <slot></slot>
+  <slot />
 </div>

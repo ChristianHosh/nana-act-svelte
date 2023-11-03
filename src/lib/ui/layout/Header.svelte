@@ -1,62 +1,62 @@
 <script lang="ts">
-    import {page} from "$app/stores";
-
-    const whatIsPage = () => {
-        console.log($page);
-    }
+  import { page } from "$app/stores";
 </script>
 
-<header class="navbar bg-base-100 sticky top-0 border-b border-b-base-content border-1">
-    <div class="flex-1">
-        <h1 class="text-3xl font-bold">Nana Online</h1>
+<header
+  class="navbar bg-base-100 sticky top-0 border-b border-b-base-content border-1"
+>
+  <div class="flex-1">
+    <h1 class="text-3xl font-bold">Nana Online</h1>
+  </div>
+  {#if $page.data.user}
+    <div>
+      <a
+        href="/dashboard"
+        class="btn btn-ghost"
+        class:btn-active={$page.url.pathname === "/dashboard"}
+      >
+        Dashboard
+      </a>
+      <a
+        href="/customers"
+        class="btn btn-ghost"
+        class:btn-active={$page.url.pathname === "/customers"}
+      >
+        Customers
+      </a>
+      <a
+        href="/orders"
+        class="btn btn-ghost"
+        class:btn-active={$page.url.pathname === "/orders"}
+      >
+        Orders
+      </a>
+      <a
+        href="/expenses"
+        class="btn btn-ghost"
+        class:btn-active={$page.url.pathname === "/expenses"}
+      >
+        Expenses
+      </a>
+      <a
+        href="/accounting"
+        class="btn btn-ghost"
+        class:btn-active={$page.url.pathname === "/accounting"}
+      >
+        Accounting
+      </a>
+      <details class="dropdown">
+        <summary class="m-1 btn btn-ghost">Others</summary>
+        <ul
+          class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52"
+        >
+          <li><a href="/settings">Settings</a></li>
+        </ul>
+      </details>
     </div>
-    {#if ($page.data.user)}
-        <div>
-            <a href="/dashboard"
-               class="btn btn-ghost"
-               class:btn-active={$page.url.pathname === '/dashboard'}
-            >
-                Dashboard
-            </a>
-            <a href="/customers"
-               class="btn btn-ghost"
-               class:btn-active={$page.url.pathname === '/customers'}
-            >
-                Customers
-            </a>
-            <a href="/orders"
-               class="btn btn-ghost"
-               class:btn-active={$page.url.pathname === '/orders'}
-            >
-                Orders
-            </a>
-            <a href="/expenses"
-               class="btn btn-ghost"
-               class:btn-active={$page.url.pathname === '/expenses'}
-            >
-                Expenses
-            </a>
-            <a href="/accounting"
-               class="btn btn-ghost"
-               class:btn-active={$page.url.pathname === '/accounting'}
-            >
-                Accounting
-            </a>
-            <details class="dropdown">
-                <summary class="m-1 btn btn-ghost">Others</summary>
-                <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
-                    <li><a href="/settings">Settings</a></li>
-                </ul>
-            </details>
-        </div>
-    {:else}
-        <div>
-            <a href="/login"
-               class="btn btn-ghost"
-            >
-                Login
-            </a>
-        </div>
-    {/if}
-
+  {:else}
+    <div>
+      <a href="/login" class="btn btn-ghost"> Login </a>
+    </div>
+  {/if}
 </header>
