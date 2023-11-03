@@ -47,41 +47,49 @@
     <h1 class="text-2xl">Customers</h1>
   </div>
   <div
-    class="mb-2 py-4 px-2 bg-neutral-content shadow shadow-black flex justify-between"
+    class="mb-2 py-4 px-2 bg-neutral-content shadow shadow-black flex flex-col gap-4"
   >
-    <div class="join w-1/2 flex">
-      <form on:submit|preventDefault={() => applySearchFilters()}>
-        <input
-          placeholder="Search name or handle"
-          class="input input-bordered join-item flex-1"
-          type="text"
-          bind:value={nameSearchParam}
-        />
-      </form>
-      <CitySelect
-        placeholderText="Filter City"
-        styleClass="join-item"
-        bind:selectedValue={citySearchParam}
-        bind:searchValue={citySearchValue}
-        on:selectionchange={() => applySearchFilters()}
-      />
-      <button class="btn join-item" on:click={() => applySearchFilters()}>
-        <Icon class="text-lg" icon="mdi:search" />
-        Search
-      </button>
-      <button class="btn join-item" on:click={() => resetSearchFilters()}>
-        <Icon class="text-lg" icon="mdi:backspace-outline" />
-        Clear
-      </button>
+    <div class="flex">
+      <a href="/customers/editor" class="btn btn-primary">
+        <Icon class="text-lg" icon="mdi:add" />
+        Create New Customer
+      </a>
     </div>
-    <Pagination
-      pageIndex={data.currentPage.number}
-      totalPages={data.currentPage.totalPages}
-      pageSize={2}
-      pageSizeOptions={[10, 25, 50]}
-      showFirstLastButtons={true}
-      on:pagechange={(event) => applySearchFilters(event)}
-    />
+    <div class="flex justify-between">
+      <div class="join w-1/2 flex">
+        <form on:submit|preventDefault={() => applySearchFilters()}>
+          <input
+            placeholder="Search name or handle"
+            class="input input-bordered join-item flex-1"
+            type="text"
+            bind:value={nameSearchParam}
+          />
+        </form>
+        <CitySelect
+          placeholderText="Filter City"
+          styleClass="join-item"
+          bind:selectedValue={citySearchParam}
+          bind:searchValue={citySearchValue}
+          on:selectionchange={() => applySearchFilters()}
+        />
+        <button class="btn join-item" on:click={() => applySearchFilters()}>
+          <Icon class="text-lg" icon="mdi:search" />
+          Search
+        </button>
+        <button class="btn join-item" on:click={() => resetSearchFilters()}>
+          <Icon class="text-lg" icon="mdi:backspace-outline" />
+          Clear
+        </button>
+      </div>
+      <Pagination
+        pageIndex={data.currentPage.number}
+        totalPages={data.currentPage.totalPages}
+        pageSize={2}
+        pageSizeOptions={[10, 25, 50]}
+        showFirstLastButtons={true}
+        on:pagechange={(event) => applySearchFilters(event)}
+      />
+    </div>
   </div>
   <div class="flex flex-col justify-center">
     <table class="table table-zebra">

@@ -41,7 +41,9 @@
       </tbody>
     </table>
   </div>
-  <div>Orders</div>
+  <div>
+
+  </div>
   <div class="rounded border-error border-2 px-4 py-2">
     <h3 class="text-2xl mb-2">Danger Zone</h3>
     <form
@@ -58,7 +60,7 @@
       <input name="id" type="hidden" hidden value={customer.id} />
       <button class="btn btn-error" type="submit" disabled={isDeleting}>
         {#if isDeleting}
-          <span class="loading loading-spinner"></span>
+          <span class="loading loading-spinner" />
           <span>Deleting {customer.fullName}</span>
         {:else}
           <span>Delete {customer.fullName}</span>

@@ -20,8 +20,8 @@
       class="flex flex-col gap-2 px-8 py-4"
       use:enhance={() => {
         isSubmitting = true;
-
         return async ({ result }) => {
+          console.log(result)
           if (result.type === "failure") isSubmitting = false;
 
           await applyAction(result);

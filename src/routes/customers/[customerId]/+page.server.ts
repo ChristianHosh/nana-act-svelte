@@ -1,4 +1,4 @@
-import { fail, redirect } from "@sveltejs/kit";
+import {error, fail, redirect} from "@sveltejs/kit";
 import { HttpClient } from "$lib/core/api/axiosInstance";
 import type { CustomerProfile } from "$lib/core/models/customerProfile.model";
 import { AxiosError } from "axios";
@@ -13,7 +13,7 @@ export async function load(event) {
 
   try {
     let customerProfileResponse = await HttpClient.get<CustomerProfile>(
-      `/customers/${customerId}`,
+      `/customers/${customerId}/profile`,
       event.locals.user
     );
 
@@ -32,10 +32,13 @@ export async function load(event) {
 export const actions = {
   // @ts-ignore
   update: async (event) => {
+    if (!event.locals.user) throw error(401);
 
   },
   // @ts-ignore
   delete: async (event) => {
+    if (!event.locals.user) throw error(401);
+
     const formData = Object.fromEntries(await event.request.formData());
     const customerId: number = formData.id;
 
