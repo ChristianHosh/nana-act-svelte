@@ -1,19 +1,21 @@
 import axios from "axios";
-import {any} from "zod";
 
 const localURL = 'http://localhost:8080/api';
 const hostURL = 'https://';
 
-const axiosInstance = axios.create({
-    baseURL: localURL,
-    validateStatus: (status) => {
-        return status < 500
-    }
-});
+function createAxiosInstance() {
+    let instance = axios.create({
+        baseURL: localURL,
+    });
+
+    return instance;
+}
+
+const axiosInstance = createAxiosInstance();
 
 export class HttpClient {
     static get<T>(url: string, token?: string, params?: any) {
-        return axiosInstance.get<T>(url,  {
+        return axiosInstance.get<T>(url, {
             headers: {
                 Authorization: `Bearer ${token}`
             },

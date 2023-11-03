@@ -15,7 +15,7 @@
 </svelte:head>
 
 <div class="flex justify-center mt-8">
-    <div class="w-1/2 rounded bg-neutral-800">
+    <div class="w-1/2 rounded bg-neutral-content">
         <div class="py-4 px-8 border-1 border-b border-b-neutral-700">
             <h2 class="text-3xl">Login</h2>
         </div>
@@ -24,6 +24,7 @@
               on:submit|preventDefault={submit}
               use:enhance={() => {
                   return async ({result}) => {
+                      console.log(result)
                       if (result.type === 'failure')
                           isSubmitting = false;
 

@@ -1,11 +1,11 @@
 import {fail, redirect} from "@sveltejs/kit";
-import type {PageServerLoadEvent} from "../../../.svelte-kit/types/src/routes/customers/$types";
 import {HttpClient} from "$lib/core/api/axiosInstance";
 import type {Pageable} from "$lib/core/models/pageable.model";
 import type {Customer} from "$lib/core/models/customer.model";
+import {AxiosError} from "axios";
 
 // @ts-ignore
-export async function load(event){
+export async function load(event) {
     if (!event.locals.user)
         throw redirect(307, `/login?redirectTo=${event.url.pathname}`);
 
@@ -21,13 +21,18 @@ export async function load(event){
         city: citySearch,
     }
 
-    let pageResponse = await HttpClient.get<Pageable<Customer>>('customers', event.locals.user, searchParams);
+    try {
+        let pageResponse = await HttpClient.get<Pageable<Customer>>('customers', event.locals.user, searchParams);
 
-    if (pageResponse.status >= 400){
-        throw fail(pageResponse.status);
-    }
+        return {
+            currentPage: pageResponse.data
+        }
 
-    return {
-        currentPage: pageResponse.data
+    } catch (e) {
+        if (e instanceof AxiosError) {
+            if (e)
+                throw fail(e.status || 500);
+        }
+        throw fail(500);
     }
 }

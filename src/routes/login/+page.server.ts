@@ -2,8 +2,8 @@ import {fail, redirect} from "@sveltejs/kit";
 import {HttpClient} from "$lib/core/api/axiosInstance";
 import {z} from "zod";
 import type {JwtToken} from "$lib/core/models/jwtToken.model";
-import type {User} from "$lib/core/models/user.model";
 import type {RequestEvent} from "../../../.svelte-kit/types/src/routes/login/$types";
+import {AxiosError} from "axios";
 
 const loginRequestZ = z.object({
     username: z.string()
@@ -42,24 +42,27 @@ export const actions = {
             });
         }
 
-        const loginResponse = await HttpClient.post<JwtToken>('auth/login',
-            loginRequest.data
-        );
+        try {
+            const loginResponse = await HttpClient.post<JwtToken>('auth/login',
+                loginRequest.data
+            );
+            event.cookies.set('jwt-token', loginResponse.data.token, {path: '/'});
+        } catch (e) {
+            if (e instanceof AxiosError) {
+                if (e.response?.status === 401) {
+                    return fail(401, {
+                        data: {username: formData.username},
+                        errors: {username: undefined, password: undefined},
+                        errorMessage: e.response.data.message
+                    })
+                }
+            }
+            return fail(500);
+        }
 
-        if (loginResponse.status === 401)
-            return fail(401, {
-                data: {username: formData.username},
-                errors: {username: undefined, password: undefined},
-                errorMessage: "username or password is incorrect"
-            });
-
-        console.log('successful request')
-
-        const userResponse = await HttpClient.get<User>('auth/user', loginResponse.data.token);
-
-        event.cookies.set('jwt-token', loginResponse.data.token, {path: '/'});
         if (redirectTo)
             throw redirect(307, `/${redirectTo.slice(1)}`);
-        throw redirect(307, '/')
+        throw redirect(307, '/');
+
     }
 }
