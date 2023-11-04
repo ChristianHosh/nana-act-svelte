@@ -9,6 +9,13 @@
 
   let isSubmitting: boolean = false;
   let selectedCity: string;
+  let citySearchValue: string;
+
+  if (customer){
+    selectedCity = customer.city.id.toString();
+    citySearchValue = customer.city.name;
+  }
+
 </script>
 
 <div class="flex justify-center mt-8">
@@ -127,6 +134,7 @@
           styleClass="w-full"
           placeholderText=""
           bind:selectedValue={selectedCity}
+          bind:searchValue={citySearchValue}
         />
         {#if errors?.cityId}
           <label for="cityId" class="label">
@@ -141,7 +149,7 @@
       >
         {#if isSubmitting}
           <span class="loading loading-spinner" />
-          <span>Saving Customer</span>
+          <span>Saving</span>
         {:else}
           <span>Save</span>
         {/if}

@@ -5,4 +5,4 @@
   export let form;
 </script>
 
-<CustomerEditor customer={data.customer} errors={form.errors}/>
+<CustomerEditor customer={data.customer} errors={form?.errors} headerError={form?.errorMessage}/>

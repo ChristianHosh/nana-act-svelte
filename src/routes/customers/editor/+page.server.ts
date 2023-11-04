@@ -8,8 +8,6 @@ import type { AxiosResponse } from "axios";
 // @ts-ignore
 export const actions = {
   default: async (event: any) => {
-    console.log("processing event request");
-
     const formData = Object.fromEntries(await event.request.formData());
 
     let customerRequest = CustomerRequestValidation.safeParse({
@@ -29,8 +27,6 @@ export const actions = {
       });
     }
 
-    console.log("passed client validation => ", customerRequest);
-
     let customerResponse: AxiosResponse<Customer> | undefined;
     try {
       customerResponse = await HttpClient.post<Customer>(
@@ -38,10 +34,7 @@ export const actions = {
         customerRequest.data,
         event.locals.user
       );
-
-      console.log("created on server => ", customerResponse);
     } catch (e) {
-      console.log(e)
       if (e instanceof AxiosError) {
         console.log('error => ', e.response?.data)
         return fail(e.response?.status || 400, {
