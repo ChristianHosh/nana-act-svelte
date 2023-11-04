@@ -80,7 +80,7 @@
       {#each cities as city}
         <li>
           <button
-            class="btn btn-ghost justify-start align-middle"
+            class="btn btn-sm btn-ghost justify-start align-middle"
             class:btn-active={selectedValue === city.id.toString()}
             on:click={() => {
               selectCity(city);
@@ -92,7 +92,7 @@
       {:else}
         <li>
           <button
-            class="btn btn-ghost btn- justify-start align-middle"
+            class="btn btn-ghost btn-sm justify-start align-middle"
             disabled
           >
             City doesn't exist
@@ -101,7 +101,7 @@
       {/each}
     {:else}
       <li>
-        <button class="btn btn-ghost btn- justify-start align-middle" disabled>
+        <button class="btn btn-ghost btn-sm justify-start align-middle" disabled>
           <span class="loading loading-spinner" />
           Loading...
         </button>

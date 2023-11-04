@@ -14,7 +14,7 @@ export async function load(event) {
   let nameSearch: string = event.url.searchParams.get("name");
   let citySearch: string = event.url.searchParams.get("city");
 
-  let searchParams = {
+  let params = {
     page: pageIndex,
     size: pageSize,
     name: nameSearch,
@@ -25,7 +25,7 @@ export async function load(event) {
     let pageResponse = await HttpClient.get<Pageable<Customer>>(
       "customers",
       event.locals.user,
-      searchParams
+      params
     );
 
     return {
@@ -33,7 +33,7 @@ export async function load(event) {
     };
   } catch (e) {
     if (e instanceof AxiosError) {
-      if (e) throw fail(e.status || 500);
+      if (e) throw fail(e.response?.status || 500);
     }
     throw fail(500);
   }

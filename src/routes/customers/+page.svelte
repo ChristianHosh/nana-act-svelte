@@ -66,7 +66,7 @@
           />
         </form>
         <CitySelect
-          placeholderText="Filter City"
+          placeholderText="Filter by City"
           styleClass="join-item"
           bind:selectedValue={citySearchParam}
           bind:searchValue={citySearchValue}
@@ -132,6 +132,12 @@
             </td>
             <td class="capitalize">
               <span>{customer.address}</span>
+            </td>
+          </tr>
+        {:else}
+          <tr>
+            <td colspan="8">
+              <span class="text-error text-lg font-bold">No customers available</span>
             </td>
           </tr>
         {/each}
