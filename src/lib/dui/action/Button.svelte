@@ -90,8 +90,6 @@
         class:loading-infinity={loadingIcon === "infinity"}
       />
     {/if}
-    <span>
-      <slot />
-    </span>
+    <slot />
   </button>
 {/if}
