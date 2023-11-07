@@ -30,7 +30,7 @@
         Customers
       </Button>
       <Button
-              class=""
+              class="join-item"
               linkTo="/orders"
               color="ghost"
               icon="mdi:checkbook-arrow-left"
