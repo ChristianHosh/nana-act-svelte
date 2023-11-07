@@ -138,13 +138,7 @@
               <Button linkTo={`/customers/${customer.id}`}
                       color="primary"
                       circle
-                      icon="mdi:book-open-outline"></Button>
-<!--              <a-->
-<!--                class="btn btn-primary btn-circle"-->
-<!--                href={`/customers/${customer.id}`}-->
-<!--              >-->
-<!--                <Icon class="text-lg" icon="mdi:book-open-outline" />-->
-<!--              </a>-->
+                      icon="mdi:book-open-outline" />
             </td>
           </tr>
         {:else}

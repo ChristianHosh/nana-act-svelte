@@ -1,6 +1,7 @@
 <script lang="ts">
   import { applyAction, enhance } from "$app/forms";
   import Time from "svelte-time";
+  import Button from "$lib/dui/action/Button.svelte";
 
   export let data;
 
@@ -63,11 +64,14 @@
   <div class="rounded border-error border-2 px-4 py-2">
     <h3 class="text-2xl mb-2">Danger Zone</h3>
     <div class="flex gap-4">
-      <a
-        href={`/customers/editor/${customer.id}`}
-        class="btn btn-primary btn-outline capitalize"
-        >Edit {customer.fullName}</a
+      <Button
+        linkTo={`/customers/editor/${customer.id}`}
+        color="secondary"
+        outline
+        class="capitalize"
       >
+        Edit '{customer.fullName}'
+      </Button>
       <form
         method="post"
         action="?/delete"
@@ -80,14 +84,18 @@
         }}
       >
         <input name="id" type="hidden" hidden value={customer.id} />
-        <button class="btn btn-error" type="submit" disabled={isDeleting}>
+        <Button
+          color="error"
+          type="submit"
+          loading={isDeleting}
+          loadingIcon="spinner"
+        >
           {#if isDeleting}
-            <span class="loading loading-spinner" />
-            <span>Deleting {customer.fullName}</span>
+            Deleting '{customer.fullName}'
           {:else}
-            <span>Delete {customer.fullName}</span>
+            Delete '{customer.fullName}'
           {/if}
-        </button>
+        </Button>
       </form>
     </div>
   </div>

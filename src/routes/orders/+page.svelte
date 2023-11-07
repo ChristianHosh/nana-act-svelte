@@ -6,6 +6,7 @@
   import { goto } from "$app/navigation";
   import CityAutoComplete from "$lib/ui/components/CityAutoComplete.svelte";
   import StatusSelect from "$lib/ui/components/StatusSelect.svelte";
+  import Button from "$lib/dui/action/Button.svelte";
 
   export let data;
 
@@ -200,12 +201,10 @@
               </a>
             </td>
             <td>
-              <a
-                class="btn btn-primary btn-circle"
-                href={`/orders/${order.id}`}
-              >
-                <Icon class="text-lg" icon="mdi:book-open-outline" />
-              </a>
+              <Button linkTo={`/orders/${order.id}`}
+                      icon="mdi:book-open-outline"
+                      color="primary"
+                      circle />
             </td>
           </tr>
         {:else}
