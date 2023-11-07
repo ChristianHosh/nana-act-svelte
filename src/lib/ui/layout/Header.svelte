@@ -1,50 +1,61 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import Button from "$lib/dui/action/Button.svelte";
 </script>
 
 <header
-  class="navbar bg-base-100 sticky top-0 border-b border-b-base-content border-1"
+  class="navbar bg-base-100 z-50 sticky top-0 border-b border-b-base-content border-1"
 >
   <div class="flex-1">
     <h1 class="text-3xl font-bold">Nana Online</h1>
   </div>
   {#if $page.data.user}
-    <div>
-      <a
-        href="/dashboard"
-        class="btn btn-ghost"
-        class:btn-active={$page.url.pathname === "/dashboard"}
+    <div class="join">
+      <Button
+              class="join-item"
+        linkTo="/dashboard"
+        color="ghost"
+        icon="mdi:view-dashboard-outline"
+        active={$page.url.pathname === "/dashboard"}
       >
         Dashboard
-      </a>
-      <a
-        href="/customers"
-        class="btn btn-ghost"
-        class:btn-active={$page.url.pathname === "/customers"}
+      </Button>
+      <Button
+              class="join-item"
+              linkTo="/customers"
+              color="ghost"
+              icon="mdi:account-group-outline"
+              active={$page.url.pathname === "/customers"}
       >
         Customers
-      </a>
-      <a
-        href="/orders"
-        class="btn btn-ghost"
-        class:btn-active={$page.url.pathname === "/orders"}
+      </Button>
+      <Button
+              class=""
+              linkTo="/orders"
+              color="ghost"
+              icon="mdi:checkbook-arrow-left"
+              active={$page.url.pathname === "/orders"}
       >
         Orders
-      </a>
-      <a
-        href="/expenses"
-        class="btn btn-ghost"
-        class:btn-active={$page.url.pathname === "/expenses"}
+      </Button>
+      <Button
+              class="join-item"
+              linkTo="/expenses"
+              color="ghost"
+              icon="mdi:checkbook-arrow-right"
+              active={$page.url.pathname === "/expenses"}
       >
         Expenses
-      </a>
-      <a
-        href="/accounting"
-        class="btn btn-ghost"
-        class:btn-active={$page.url.pathname === "/accounting"}
+      </Button>
+      <Button
+              class="join-item"
+              linkTo="/accounting"
+              color="ghost"
+              icon="mdi:finance"
+              active={$page.url.pathname === "/accounting"}
       >
         Accounting
-      </a>
+      </Button>
       <details class="dropdown">
         <summary class="m-1 btn btn-ghost">Others</summary>
         <ul
@@ -56,6 +67,9 @@
     </div>
   {:else}
     <div>
+      <Button>
+        Login
+      </Button>
       <a href="/login" class="btn btn-ghost"> Login </a>
     </div>
   {/if}

@@ -4,6 +4,7 @@
   import { goto } from "$app/navigation";
   import CitySelect from "$lib/ui/components/CityAutoComplete.svelte";
   import Pagination from "$lib/ui/components/Paginator.svelte";
+  import Button from "$lib/dui/action/Button.svelte";
 
   export let data;
 
@@ -134,12 +135,16 @@
               <span>{customer.address}</span>
             </td>
             <td>
-              <a
-                class="btn btn-primary btn-circle"
-                href={`/customers/${customer.id}`}
-              >
-                <Icon class="text-lg" icon="mdi:book-open-outline" />
-              </a>
+              <Button linkTo={`/customers/${customer.id}`}
+                      color="primary"
+                      circle
+                      icon="mdi:book-open-outline"></Button>
+<!--              <a-->
+<!--                class="btn btn-primary btn-circle"-->
+<!--                href={`/customers/${customer.id}`}-->
+<!--              >-->
+<!--                <Icon class="text-lg" icon="mdi:book-open-outline" />-->
+<!--              </a>-->
             </td>
           </tr>
         {:else}
