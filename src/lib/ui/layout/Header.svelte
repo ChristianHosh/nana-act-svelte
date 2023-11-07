@@ -67,10 +67,9 @@
     </div>
   {:else}
     <div>
-      <Button>
+      <Button linkTo="/login" color="ghost">
         Login
       </Button>
-      <a href="/login" class="btn btn-ghost"> Login </a>
     </div>
   {/if}
 </header>

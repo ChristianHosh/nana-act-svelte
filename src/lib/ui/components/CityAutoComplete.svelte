@@ -8,8 +8,7 @@
   export let selectedValue: string;
   export let searchValue: string = "";
   export let placeholderText: string = "City";
-  export let styleClass: string = "";
-  $: styleClassReactive = styleClass;
+
   let pageable: Pageable<City>;
   let cities: City[] = [];
   let loading: boolean = false;
@@ -66,15 +65,15 @@
   };
 </script>
 
-<div class="dropdown {styleClassReactive}">
+<div class={$$props.class} class:dropdown={true}>
   <input
     on:keyup={searchAutocomplete}
     bind:value={searchValue}
-    class="input input-bordered {styleClassReactive}"
+    class="input input-bordered"
     placeholder={placeholderText}
   />
   <ul
-    class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+    class="dropdown-content z-30 menu p-2 shadow bg-base-100 rounded-box w-52"
   >
     {#if !loading}
       {#each cities as city}
@@ -101,7 +100,10 @@
       {/each}
     {:else}
       <li>
-        <button class="btn btn-ghost btn-sm justify-start align-middle" disabled>
+        <button
+          class="btn btn-ghost btn-sm justify-start align-middle"
+          disabled
+        >
           <span class="loading loading-spinner" />
           Loading...
         </button>

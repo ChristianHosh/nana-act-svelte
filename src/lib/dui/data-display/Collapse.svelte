@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ColorString } from "$lib/dui/styleConsts";
 
-  export let color: ColorString = "";
+  export let color: ColorString | string = "";
   export let focusColor: ColorString = "";
   export let arrow: boolean = false;
   export let plus: boolean = false;
@@ -15,7 +15,8 @@
 <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 <div
   tabindex="0"
-  class="collapse {$$props.class ? $$props.class : ''}"
+  class={$$props.class}
+  class:collapse={true}
   class:collapse-arrow={arrow}
   class:collapse-plus={plus}
   class:collapse-open={open}

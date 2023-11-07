@@ -1,6 +1,8 @@
 <script lang="ts">
   import { applyAction, enhance } from "$app/forms";
   import Button from "$lib/dui/action/Button.svelte";
+  import FormControl from "$lib/dui/data-input/FormControl.svelte";
+  import TextInput from "$lib/dui/data-input/TextInput.svelte";
 
   export let form;
 
@@ -34,48 +36,34 @@
           <span>{form?.errorMessage}</span>
         </div>
       {/if}
-
-      <div class="form-control w-full">
-        <label for="username" class="label">
-          <span class="label-text">Username</span>
-        </label>
-        <input
-          name="username"
+      <FormControl>
+        <span slot="top-label-text">Username</span>
+        <TextInput
           type="text"
+          name="username"
           required
-          class="w-full input {form?.errors?.username
-            ? 'input-error'
-            : 'input-bordered'}"
-          value={form?.data?.username || ""}
+          color={form?.errors?.username ? "error" : ""}
         />
-        {#if form?.errors?.username}
-          <label for="username" class="label">
-            <span class="label-text-alt text-error"
-              >{form?.errors?.username[0]}</span
-            >
-          </label>
-        {/if}
-      </div>
-      <div class="form-control w-full">
-        <label for="password" class="label">
-          <span class="label-text">Password</span>
-        </label>
-        <input
-          name="password"
-          type="password"
-          required
-          class="input {form?.errors?.password
-            ? 'input-error'
-            : 'input-bordered'} w-full"
+        <span slot="bottom-label-text" class="text-error">
+          {#if (form?.errors?.username)}
+            {form?.errors?.username[0]}
+          {/if}
+        </span>
+      </FormControl>
+      <FormControl>
+        <span slot="top-label-text">Password</span>
+        <TextInput
+                type="password"
+                name="password"
+                required
+                color={form?.errors?.password ? "error" : ""}
         />
-        {#if form?.errors?.password}
-          <label for="username" class="label">
-            <span class="label-text-alt text-error"
-              >{form?.errors?.password[0]}</span
-            >
-          </label>
-        {/if}
-      </div>
+        <span slot="bottom-label-text" class="text-error">
+          {#if (form?.errors?.password)}
+            {form?.errors?.password[0]}
+          {/if}
+        </span>
+      </FormControl>
       <Button
         {loading}
         loadingIcon="spinner"

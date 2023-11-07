@@ -5,6 +5,7 @@
   import CitySelect from "$lib/ui/components/CityAutoComplete.svelte";
   import Pagination from "$lib/ui/components/Paginator.svelte";
   import Button from "$lib/dui/action/Button.svelte";
+  import Collapse from "$lib/dui/data-display/Collapse.svelte";
 
   export let data;
 
@@ -53,33 +54,30 @@
         Create New Customer
       </a>
     </div>
-    <div class="flex justify-between">
-      <div class="join w-1/2 flex">
-        <form on:submit|preventDefault={() => applySearchFilters()}>
-          <input
-            placeholder="Search name or handle"
-            class="input input-bordered join-item flex-1"
-            type="text"
-            bind:value={nameSearchParam}
-          />
-        </form>
-        <CitySelect
-          placeholderText="Filter by City"
-          styleClass="join-item"
-          bind:selectedValue={citySearchParam}
-          bind:searchValue={citySearchValue}
-          on:selectionchange={() => applySearchFilters()}
-        />
-        <button class="btn join-item" on:click={() => applySearchFilters()}>
-          <Icon class="text-lg" icon="mdi:search" />
-          Search
-        </button>
-        <button class="btn join-item" on:click={() => resetSearchFilters()}>
-          <Icon class="text-lg" icon="mdi:backspace-outline" />
-          Clear
-        </button>
+    <Collapse class="overflow-visible" color="base-200" closeable arrow>
+      <span slot="title">Filter Customers</span>
+      <div class="flex flex-col">
+        <div class="flex gap-4">
+          <div class="form-control">
+            <label class="label" for="username">
+              <span class="label-text"> Username or Handle </span>
+            </label>
+            <input class="input input-bordered" type="text" name="username" />
+          </div>
+          <div class="form-control">
+            <label class="label" for="city">
+              <span class="label-text"> City </span>
+            </label>
+            <CitySelect
+                    placeholderText=""
+                    bind:selectedValue={citySearchParam}
+                    bind:searchValue={citySearchValue}
+                    on:selectionchange={() => applySearchFilters()}
+            />
+          </div>
+        </div>
       </div>
-    </div>
+    </Collapse>
   </div>
   <div
     class="flex flex-col justify-center pt-4 shadow-md shadow-gray-500 bg-base-100/50"
@@ -135,16 +133,20 @@
               <span>{customer.address}</span>
             </td>
             <td>
-              <Button linkTo={`/customers/${customer.id}`}
-                      color="primary"
-                      circle
-                      icon="mdi:book-open-outline" />
+              <Button
+                linkTo={`/customers/${customer.id}`}
+                color="primary"
+                circle
+                icon="mdi:book-open-outline"
+              />
             </td>
           </tr>
         {:else}
           <tr>
             <td colspan="8">
-              <span class="text-error text-lg font-bold">No customers available</span>
+              <span class="text-error text-lg font-bold"
+                >No customers available</span
+              >
             </td>
           </tr>
         {/each}
