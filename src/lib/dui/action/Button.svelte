@@ -4,20 +4,17 @@
 
   export let color: colorString = "";
   export let size: sizeString = "";
-  export let styleClass: string = "";
   export let outline: boolean = false;
   export let circle: boolean = false;
   export let wide: boolean = false;
   export let glass: boolean = false;
   export let block: boolean = false;
-  export let type: "button" | "submit" | "reset" | undefined = "button";
   export let icon: string | undefined = undefined;
   export let loadingIcon: loadingIconString | undefined = undefined;
   export let loading: boolean = false;
 </script>
 
 <button
-  {type}
   class="btn {$$props.class ? $$props.class : ''}"
   class:btn-sm={size === 'sm'}
   class:btn-xs={size === 'xs'}
