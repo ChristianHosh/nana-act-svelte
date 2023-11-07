@@ -42,7 +42,7 @@
     citySearchParam = "";
     citySearchValue = "";
     statusSearchParam = "";
-    statusSearchValue = ""
+    statusSearchValue = "";
     orderFromSearchParam = "";
     orderToSearchParam = "";
     shipFromSearchParam = "";
@@ -50,6 +50,10 @@
 
     query.delete("city");
     query.delete("status");
+    query.delete("order-from");
+    query.delete("order-to");
+    query.delete("ship-from");
+    query.delete("ship-to");
 
     goto(`?${query.toString()}`);
   };
@@ -59,10 +63,7 @@
   <title>Nana - Orders</title>
 </svelte:head>
 
-<div class="px-4">
-  <div class="py-4 mb-4">
-    <h1 class="text-2xl">Orders</h1>
-  </div>
+<div class="px-4 py-2">
   <div
     class="mb-2 py-4 px-2 bg-neutral-content shadow shadow-black flex flex-col gap-4"
   >
@@ -73,29 +74,54 @@
       </a>
     </div>
     <div class="flex justify-between">
-      <div class="join w-1/2 flex">
-                <CityAutoComplete
-                  placeholderText="Filter by City"
-                  styleClass="join-item"
-                  bind:selectedValue={citySearchParam}
-                  bind:searchValue={citySearchValue}
-                  on:selectionchange={() => applySearchFilters()}
-                />
-        <StatusSelect placeholderText="Filter by Status"
-                      styleClass="join-item"
-                      bind:selectedValue={statusSearchParam}
-                      bind:searchValue={statusSearchValue}
-                      on:selectionchange={() => applySearchFilters()}
-                      />
+      <div class="join flex flex-1">
         <button class="btn join-item" on:click={() => applySearchFilters()}>
           <Icon class="text-lg" icon="mdi:search" />
           Search
         </button>
+        <div class="indicator">
+          <span class="indicator-item indicator-center badge badge-accent"
+            >City</span
+          >
+          <CityAutoComplete
+            placeholderText="Filter by City"
+            styleClass="join-item"
+            bind:selectedValue={citySearchParam}
+            bind:searchValue={citySearchValue}
+            on:selectionchange={() => applySearchFilters()}
+          />
+        </div>
+        <div class="indicator">
+          <span class="indicator-item indicator-center badge badge-accent"
+            >Status</span
+          >
+          <StatusSelect
+            placeholderText="Filter by Status"
+            styleClass="join-item"
+            bind:selectedValue={statusSearchParam}
+            bind:searchValue={statusSearchValue}
+            on:selectionchange={() => applySearchFilters()}
+          />
+        </div>
+        <input
+          class="join-item input input-bordered w-fit"
+          placeholder="Ordered After"
+          type="date"
+          bind:value={orderFromSearchParam}
+          on:change={() => applySearchFilters()}
+        />
         <button class="btn join-item" on:click={() => resetSearchFilters()}>
           <Icon class="text-lg" icon="mdi:backspace-outline" />
           Clear
         </button>
       </div>
+    </div>
+  </div>
+  <div
+    class="flex flex-col justify-center pt-4 shadow-md shadow-gray-500 bg-base-100/50"
+  >
+    <div class="flex justify-between px-4 mb-4">
+      <h1 class="text-2xl">Orders</h1>
       <Pagination
         pageIndex={data.currentPage.number}
         totalPages={data.currentPage.totalPages}
@@ -105,8 +131,6 @@
         on:pagechange={(event) => applySearchFilters(event)}
       />
     </div>
-  </div>
-  <div class="flex flex-col justify-center">
     <table class="table table-zebra">
       <thead>
         <tr class="text-lg">
@@ -120,7 +144,7 @@
           <th>Ship Date</th>
           <th>Customer</th>
           <th>City</th>
-          <th>Note</th>
+          <th />
         </tr>
       </thead>
       <tbody>
@@ -130,19 +154,23 @@
               <span>{order.id}</span>
             </td>
             <td>
-              <span>{order.site}</span>
+              <span class={`badge badge-${order.site.toLowerCase()}`}>
+                {order.site}
+              </span>
             </td>
             <td>
-              <span>₪ {order.cost}</span>
+              <span>₪ {order.cost.toFixed(2)}</span>
             </td>
             <td>
-              <span>₪ {order.profit}</span>
+              <span>₪ {order.profit.toFixed(2)}</span>
             </td>
             <td>
-              <span>₪ {order.commission}</span>
+              <span>₪ {order.commission.toFixed(2)}</span>
             </td>
             <td>
-              <span>{order.status}</span>
+              <span class={`badge badge-${order.status.toLowerCase()}`}>
+                {order.status}
+              </span>
             </td>
             <td>
               <span>
@@ -159,13 +187,25 @@
               </span>
             </td>
             <td>
-              <span class="capitalize">{order.customer.fullName}</span>
+              <a class="link" href={`/customers/${order.customer.id}`}>
+                <span class="capitalize">{order.customer.fullName}</span>
+              </a>
             </td>
             <td>
-              <span class="capitalize">{order.customer.city.name}</span>
+              <a
+                class="link"
+                href={`/customers?city=${order.customer.city.id}`}
+              >
+                <span class="capitalize">{order.customer.city.name}</span>
+              </a>
             </td>
             <td>
-              <span>{order.note}</span>
+              <a
+                class="btn btn-primary btn-circle"
+                href={`/orders/${order.id}`}
+              >
+                <Icon class="text-lg" icon="mdi:book-open-outline" />
+              </a>
             </td>
           </tr>
         {:else}
@@ -181,3 +221,57 @@
     </table>
   </div>
 </div>
+
+<style>
+  .badge-ordered {
+    background-color: hsl(var(--in));
+  }
+
+  .badge-processing {
+    background-color: hsl(var(--s));
+  }
+
+  .badge-completed {
+    background-color: hsl(var(--su));
+  }
+
+  .badge-returned {
+    background-color: hsl(var(--wa));
+  }
+
+  .badge-canceled {
+    background-color: hsl(var(--er));
+  }
+
+  .badge-shein {
+    background-color: #db2777;
+  }
+
+  .badge-iherb {
+    background-color: #ec4899;
+  }
+
+  .badge-asos {
+    background-color: #f472b6;
+  }
+
+  .badge-next {
+    background-color: #c026d3;
+  }
+
+  .badge-amazon {
+    background-color: #d946ef;
+  }
+
+  .badge-modanisa {
+    background-color: #e879f9;
+  }
+
+  .badge-trendiol {
+    background-color: #9333ea;
+  }
+
+  .badge-ladymakeup {
+    background-color: #a855f7;
+  }
+</style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { statusList } from "$lib/core/consts";
+  import { STATUS_LIST } from "$lib/core/consts";
   import { createEventDispatcher } from "svelte";
 
   export let selectedValue: string;
@@ -8,7 +8,7 @@
   export let styleClass: string = "";
   $: styleClassReactive = styleClass;
 
-  $: filteredOptions = statusList.filter(function (option) {
+  $: filteredOptions = STATUS_LIST.filter(function (option) {
     return option.toLowerCase().includes(searchValue.toLowerCase());
   });
 

@@ -1,9 +1,10 @@
 <script lang="ts">
   import { applyAction, enhance } from "$app/forms";
+  import Button from "$lib/dui/action/Button.svelte";
 
   export let form;
 
-  let isSubmitting: boolean = false;
+  let loading: boolean = false;
 </script>
 
 <svelte:head>
@@ -19,10 +20,10 @@
       method="post"
       class="flex flex-col gap-2 px-8 py-4"
       use:enhance={() => {
-        isSubmitting = true;
+        loading = true;
         return async ({ result }) => {
-          console.log(result)
-          if (result.type === "failure") isSubmitting = false;
+          console.log(result);
+          if (result.type === "failure") loading = false;
 
           await applyAction(result);
         };
@@ -75,18 +76,20 @@
           </label>
         {/if}
       </div>
-      <button
-        disabled={isSubmitting}
-        class="btn btn-primary w-full"
+      <Button
+        {loading}
+        loadingIcon="spinner"
+        icon="mdi:login"
+        color="primary"
         type="submit"
+        block
       >
-        {#if isSubmitting}
-          <span class="loading loading-spinner" />
-          <span>Logging In</span>
+        {#if loading}
+          Logging In
         {:else}
-          <span>Login</span>
+          Login
         {/if}
-      </button>
+      </Button>
     </form>
   </div>
 </div>

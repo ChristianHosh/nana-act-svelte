@@ -2,20 +2,20 @@
   import { applyAction, enhance } from "$app/forms";
   import type { Customer } from "$lib/core/models/customer.model";
   import CityAutoComplete from "$lib/ui/components/CityAutoComplete.svelte";
+  import Button from "$lib/dui/action/Button.svelte";
 
   export let customer: Customer | undefined = undefined;
   export let errors: any;
   export let headerError: any;
 
-  let isSubmitting: boolean = false;
+  let loading: boolean = false;
   let selectedCity: string;
   let citySearchValue: string;
 
-  if (customer){
+  if (customer) {
     selectedCity = customer.city.id.toString();
     citySearchValue = customer.city.name;
   }
-
 </script>
 
 <div class="flex justify-center mt-8">
@@ -33,9 +33,9 @@
       method="post"
       class="flex flex-col gap-2 px-8 py-4"
       use:enhance={() => {
-        isSubmitting = true;
+        loading = true;
         return async ({ result }) => {
-          if (result.type === "failure") isSubmitting = false;
+          if (result.type === "failure") loading = false;
 
           await applyAction(result);
         };
@@ -142,18 +142,19 @@
           </label>
         {/if}
       </div>
-      <button
-        disabled={isSubmitting}
-        class="btn btn-primary w-full"
+      <Button
+        {loading}
+        loadingIcon="spinner"
+        color="primary"
         type="submit"
+        block
       >
-        {#if isSubmitting}
-          <span class="loading loading-spinner" />
-          <span>Saving</span>
+        {#if loading}
+          Saving
         {:else}
-          <span>Save</span>
+          Save
         {/if}
-      </button>
+      </Button>
     </form>
   </div>
 </div>

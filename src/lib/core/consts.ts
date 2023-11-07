@@ -1,4 +1,4 @@
-export const siteList = [
+export const SITE_LIST = [
     "SHEIN",
     "IHERB",
     "ASOS",
@@ -7,12 +7,15 @@ export const siteList = [
     "MODANISA",
     "TRENDIOL",
     "LADYMAKEUP"
-]
+];
 
-export const statusList = [
+export const STATUS_LIST = [
     "ORDERED",
     "PROCESSING",
     "COMPLETED",
     "CANCELED",
     "RETURNED"
-]
+];
+
+export const DEFAULT_PAGE_SIZE = "25";
+export const DEFAULT_PAGE_INDEX = "0";

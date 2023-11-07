@@ -42,10 +42,7 @@
   <title>Nana - Customers</title>
 </svelte:head>
 
-<div class="px-4">
-  <div class="py-4 mb-4">
-    <h1 class="text-2xl">Customers</h1>
-  </div>
+<div class="px-4 py-2">
   <div
     class="mb-2 py-4 px-2 bg-neutral-content shadow shadow-black flex flex-col gap-4"
   >
@@ -81,6 +78,13 @@
           Clear
         </button>
       </div>
+    </div>
+  </div>
+  <div
+    class="flex flex-col justify-center pt-4 shadow-md shadow-gray-500 bg-base-100/50"
+  >
+    <div class="flex justify-between px-4 mb-4">
+      <h1 class="text-2xl">Customers</h1>
       <Pagination
         pageIndex={data.currentPage.number}
         totalPages={data.currentPage.totalPages}
@@ -90,8 +94,6 @@
         on:pagechange={(event) => applySearchFilters(event)}
       />
     </div>
-  </div>
-  <div class="flex flex-col justify-center">
     <table class="table table-zebra">
       <thead>
         <tr class="text-lg">
@@ -101,14 +103,12 @@
           <th>Phone</th>
           <th>City</th>
           <th>Address</th>
+          <th />
         </tr>
       </thead>
       <tbody>
         {#each data.currentPage.content as customer}
-          <tr
-            class="hover cursor-pointer"
-            on:click={() => goto(`/customers/${customer.id}`)}
-          >
+          <tr>
             <td>
               <span>{customer.id}</span>
             </td>
@@ -132,6 +132,14 @@
             </td>
             <td class="capitalize">
               <span>{customer.address}</span>
+            </td>
+            <td>
+              <a
+                class="btn btn-primary btn-circle"
+                href={`/customers/${customer.id}`}
+              >
+                <Icon class="text-lg" icon="mdi:book-open-outline" />
+              </a>
             </td>
           </tr>
         {:else}
