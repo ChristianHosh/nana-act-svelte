@@ -4,6 +4,7 @@
     export let color: ColorString = "";
     export let size: SizeString = "md";
     export let bordered: boolean = true;
+    export let value: string = "";
 </script>
 
 <input class={$$props.class}
@@ -21,4 +22,7 @@
        class:input-sm={size === "sm"}
        class:input-md={size === "md"}
        class:input-lg={size === "lg"}
+       bind:value={value}
+       on:focus
+       on:input
        {...$$restProps}>
