@@ -1,4 +1,4 @@
-import { CustomerRequestValidation } from "$lib/core/models/customer.model";
+import { CustomerSchema } from "$lib/core/models/customer.model";
 import { fail, redirect } from "@sveltejs/kit";
 import { AxiosError } from "axios";
 import { HttpClient } from "$lib/core/api/axiosInstance";
@@ -10,7 +10,7 @@ export const actions = {
   default: async (event: any) => {
     const formData = Object.fromEntries(await event.request.formData());
 
-    let customerRequest = CustomerRequestValidation.safeParse({
+    let customerRequest = CustomerSchema.safeParse({
       fullName: formData.fullName,
       address: formData.address,
       phoneNumber: formData.phoneNumber,

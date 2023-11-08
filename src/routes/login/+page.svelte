@@ -1,10 +1,28 @@
 <script lang="ts">
-  import { applyAction, enhance } from "$app/forms";
   import Button from "$lib/dui/action/Button.svelte";
   import FormControl from "$lib/dui/data-input/FormControl.svelte";
   import TextInput from "$lib/dui/data-input/TextInput.svelte";
+  import {superForm} from "sveltekit-superforms/client";
+  import {LoginSchema} from "$lib/core/models/user.model";
+  import Icon from "@iconify/svelte";
 
-  export let form;
+  // export let form;
+  export let data;
+  let message: string | undefined;
+
+  const {form, errors, enhance} = superForm(data.form, {
+    applyAction: true,
+    validators: LoginSchema,
+    taintedMessage: "are you sure you want to exit?",
+    onSubmit: () => loading = true,
+    onResult: ({result}) => {
+      loading = false
+      message = undefined
+      if (result.type === 'failure'){
+        message = result.data?.message;
+      }
+    }
+  });
 
   let loading: boolean = false;
 </script>
@@ -21,19 +39,12 @@
     <form
       method="post"
       class="flex flex-col gap-2 px-8 py-4"
-      use:enhance={() => {
-        loading = true;
-        return async ({ result }) => {
-          console.log(result);
-          if (result.type === "failure") loading = false;
-
-          await applyAction(result);
-        };
-      }}
+      use:enhance
     >
-      {#if form?.errorMessage}
-        <div class="alert alert-error w-full">
-          <span>{form?.errorMessage}</span>
+      {#if message}
+        <div class="alert alert-error">
+          <Icon icon="mdi:alert" class="text-lg" />
+          {message}
         </div>
       {/if}
       <FormControl>
@@ -41,12 +52,12 @@
         <TextInput
           type="text"
           name="username"
-          required
-          color={form?.errors?.username ? "error" : ""}
+          bind:value={$form.username}
+          color={$errors.username ? "error" : ""}
         />
         <span slot="bottom-label-text" class="text-error">
-          {#if (form?.errors?.username)}
-            {form?.errors?.username[0]}
+          {#if ($errors?.username)}
+            {$errors?.username[0]}
           {/if}
         </span>
       </FormControl>
@@ -56,11 +67,12 @@
                 type="password"
                 name="password"
                 required
-                color={form?.errors?.password ? "error" : ""}
+                bind:value={$form.password}
+                color={$errors.password ? "error" : ""}
         />
         <span slot="bottom-label-text" class="text-error">
-          {#if (form?.errors?.password)}
-            {form?.errors?.password[0]}
+          {#if ($errors.password)}
+            {$errors.password[0]}
           {/if}
         </span>
       </FormControl>

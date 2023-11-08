@@ -1,4 +1,4 @@
-import {error, fail, redirect} from "@sveltejs/kit";
+import {error, fail, redirect, type RequestEvent} from "@sveltejs/kit";
 import { HttpClient } from "$lib/core/api/axiosInstance";
 import type { CustomerProfile } from "$lib/core/models/customerProfile.model";
 import { AxiosError } from "axios";
@@ -6,9 +6,6 @@ import type { Customer } from "$lib/core/models/customer.model";
 
 // @ts-ignore
 export async function load(event) {
-  if (!event.locals.user)
-    throw redirect(307, `/login?redirectTo=${event.url.pathname}`);
-
   let customerId = event.url.pathname.split("/")[2];
 
   try {
@@ -30,17 +27,11 @@ export async function load(event) {
 
 // @ts-ignore
 export const actions = {
-  // @ts-ignore
-  update: async (event) => {
-    if (!event.locals.user) throw error(401);
-
-  },
-  // @ts-ignore
-  delete: async (event) => {
+  delete: async (event: RequestEvent) => {
     if (!event.locals.user) throw error(401);
 
     const formData = Object.fromEntries(await event.request.formData());
-    const customerId: number = formData.id;
+    const customerId: number = Number(formData.id);
 
     try {
       const customerResponse = await HttpClient.delete<Customer>(

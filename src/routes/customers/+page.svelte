@@ -1,5 +1,4 @@
 <script lang="ts">
-  import Icon from "@iconify/svelte";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import CitySelect from "$lib/ui/components/CityAutoComplete.svelte";
@@ -49,10 +48,9 @@
     class="mb-2 py-4 px-2 bg-neutral-content shadow shadow-black flex flex-col gap-4"
   >
     <div class="flex">
-      <a href="/customers/editor" class="btn btn-primary">
-        <Icon class="text-lg" icon="mdi:add" />
+      <Button linkTo="/customers/editor" color="primary" icon="mdi:add" wide>
         Create New Customer
-      </a>
+      </Button>
     </div>
     <Collapse class="overflow-visible" color="base-200" closeable arrow>
       <span slot="title">Filter Customers</span>

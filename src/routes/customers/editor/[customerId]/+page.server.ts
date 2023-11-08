@@ -2,14 +2,11 @@ import {fail, redirect} from "@sveltejs/kit";
 import {HttpClient} from "$lib/core/api/axiosInstance";
 import {AxiosError} from "axios";
 import type {Customer} from "$lib/core/models/customer.model";
-import {CustomerRequestValidation} from "$lib/core/models/customer.model";
+import {CustomerSchema} from "$lib/core/models/customer.model";
 import type {AxiosResponse} from "axios";
 
 // @ts-ignore
 export async function load(event) {
-  if (!event.locals.user)
-    throw redirect(307, `/login?redirectTo=${event.url.pathname}`);
-
   const customerId = event.url.pathname.split("/")[3];
 
   try {
@@ -35,7 +32,7 @@ export const actions = {
 
     const customerId = event.url.pathname.split("/")[3];
 
-    let customerRequest = CustomerRequestValidation.safeParse({
+    let customerRequest = CustomerSchema.safeParse({
       fullName: formData.fullName,
       address: formData.address,
       phoneNumber: formData.phoneNumber,

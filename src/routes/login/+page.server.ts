@@ -1,67 +1,47 @@
-import { fail, redirect } from "@sveltejs/kit";
-import { HttpClient } from "$lib/core/api/axiosInstance";
-import { z } from "zod";
-import type { JwtToken } from "$lib/core/models/jwtToken.model";
+import { type Actions, fail, redirect } from "@sveltejs/kit";
 import type { RequestEvent } from "../../../.svelte-kit/types/src/routes/login/$types";
+import { LoginSchema } from "$lib/core/models/user.model";
+import { superValidate } from "sveltekit-superforms/server";
+import { HttpClient } from "$lib/core/api/axiosInstance";
+import type { JwtToken } from "$lib/core/models/jwtToken.model";
 import { AxiosError } from "axios";
-
-const loginRequestZ = z.object({
-  username: z.string().max(20, "username must be less than 20 characters long"),
-  password: z
-    .string()
-    .max(20, "password must be between 8 and 20 characters long")
-    .min(8, "password must be between 8 and 20 characters long"),
-});
 
 /** @type {import('./$types').PageServerLoad} */
 // @ts-ignore
 export async function load(event) {
-  if (event.locals.user) throw redirect(307, "/");
+  const form = await superValidate(event, LoginSchema);
+
+  return {
+    form,
+  };
 }
 
 /** @type {import('./$types').Actions} */
-export const actions = {
+export const actions: Actions = {
   // @ts-ignore
   default: async (event: RequestEvent) => {
     const redirectTo = event.url.searchParams.get("redirectTo");
 
-    const formData = Object.fromEntries(await event.request.formData());
+    const form = await superValidate(event, LoginSchema);
 
-    let loginRequest = loginRequestZ.safeParse({
-      username: formData.username,
-      password: formData.password,
-    });
-
-    if (!loginRequest.success) {
-      const { fieldErrors: errors } = loginRequest.error.flatten();
-      const { password, ...rest } = formData;
-      return fail(400, {
-        data: rest,
-        errors,
-        errorMessage: undefined,
-      });
-    }
+    if (!form.valid) return fail(400, { form });
 
     try {
-      const loginResponse = await HttpClient.post<JwtToken>(
-        "auth/login",
-        loginRequest.data
+      const jwtResponse = await HttpClient.post<JwtToken>(
+        "/auth/login",
+        form.data
       );
-      event.cookies.set("jwt-token", loginResponse.data.token, { path: "/" });
+      event.cookies.set("jwt-token", jwtResponse.data.token, { path: "/" });
     } catch (e) {
-      if (e instanceof AxiosError) {
-        if (e.response?.status === 401) {
-          return fail(401, {
-            data: { username: formData.username },
-            errors: { username: undefined, password: undefined },
-            errorMessage: e.response.data.message,
-          });
-        }
-      }
-      return fail(500);
+      if (e instanceof AxiosError)
+        return fail(e.response?.status || 500, {
+          form,
+          message: e.response?.data.message,
+        });
+      throw fail(500, { form });
     }
 
     if (redirectTo) throw redirect(307, `/${redirectTo.slice(1)}`);
-    throw redirect(307, "/");
+    throw  redirect(307, "/");
   },
 };

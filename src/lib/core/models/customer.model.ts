@@ -12,7 +12,7 @@ export interface Customer {
   city: City;
 }
 
-export const CustomerRequestValidation = z.object({
+export const CustomerSchema = z.object({
   fullName: z.string({required_error: "name is required"})
       .max(50, "name must be less than 50 characters long"),
   address: z.string({required_error: "address is required"})

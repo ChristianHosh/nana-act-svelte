@@ -1,10 +1,20 @@
-import { redirect } from "@sveltejs/kit";
+import {redirect, type RequestEvent} from "@sveltejs/kit";
 
 /** @type {import('@sveltejs/kit').Handle} */
 // @ts-ignore
-export async function handle({ event, resolve }) {
+export async function handle({ event, resolve }: {event: RequestEvent}) {
   const jwt = event.cookies.get("jwt-token");
   event.locals.user = jwt ? jwt : null;
+
+  if (!event.url.pathname.startsWith("/login")){
+    if (!event.locals.user){
+      throw redirect(307, `/login?redirectTo=${event.url.pathname}`)
+    }
+  }else {
+    if (event.locals.user){
+      throw redirect(307, "/dashboard")
+    }
+  }
 
   return resolve(event);
 }
