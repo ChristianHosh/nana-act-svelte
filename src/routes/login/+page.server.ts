@@ -1,7 +1,7 @@
 import { type Actions, fail, redirect } from "@sveltejs/kit";
 import type { RequestEvent } from "../../../.svelte-kit/types/src/routes/login/$types";
-import { LoginSchema } from "$lib/core/models/user.model";
-import { superValidate } from "sveltekit-superforms/server";
+import { loginSchema } from "$lib/core/models/user.model";
+import {message, superValidate} from "sveltekit-superforms/server";
 import { HttpClient } from "$lib/core/api/axiosInstance";
 import type { JwtToken } from "$lib/core/models/jwtToken.model";
 import { AxiosError } from "axios";
@@ -9,7 +9,7 @@ import { AxiosError } from "axios";
 /** @type {import('./$types').PageServerLoad} */
 // @ts-ignore
 export async function load(event) {
-  const form = await superValidate(event, LoginSchema);
+  const form = await superValidate(event, loginSchema);
 
   return {
     form,
@@ -22,7 +22,7 @@ export const actions: Actions = {
   default: async (event: RequestEvent) => {
     const redirectTo = event.url.searchParams.get("redirectTo");
 
-    const form = await superValidate(event, LoginSchema);
+    const form = await superValidate(event, loginSchema);
 
     if (!form.valid) return fail(400, { form });
 
@@ -34,9 +34,9 @@ export const actions: Actions = {
       event.cookies.set("jwt-token", jwtResponse.data.token, { path: "/" });
     } catch (e) {
       if (e instanceof AxiosError)
-        return fail(e.response?.status || 500, {
-          form,
-          message: e.response?.data.message,
+        return message(form, {
+          text: e.response?.data.message,
+          status: e.response?.status || 500,
         });
       throw fail(500, { form });
     }

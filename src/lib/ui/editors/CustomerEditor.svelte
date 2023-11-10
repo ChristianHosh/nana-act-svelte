@@ -1,23 +1,49 @@
 <script lang="ts">
-  import { applyAction, enhance } from "$app/forms";
-  import type { Customer } from "$lib/core/models/customer.model";
+  import type {
+    Customer,
+    CustomerSchema,
+  } from "$lib/core/models/customer.model";
   import CityAutoComplete from "$lib/ui/components/CityAutoComplete.svelte";
   import Button from "$lib/dui/action/Button.svelte";
+  import { superForm } from "sveltekit-superforms/client";
+  import { customerSchema } from "$lib/core/models/customer.model";
+  import FormControl from "$lib/dui/data-input/FormControl.svelte";
+  import TextInput from "$lib/dui/data-input/TextInput.svelte";
+  import Icon from "@iconify/svelte";
+  import type { SuperValidated } from "sveltekit-superforms";
 
   export let customer: Customer | undefined = undefined;
-  export let errors: any;
-  export let headerError: any;
+  export let data: SuperValidated<CustomerSchema>;
 
   let loading: boolean = false;
-  let selectedCity: string;
-  let citySearchValue: string;
+  let message: string | undefined;
 
-  if (customer) {
-    selectedCity = customer.city.id.toString();
-    citySearchValue = customer.city.name;
-  }
+  export const { form, errors, enhance } = superForm<typeof customerSchema>(
+    data,
+    {
+      applyAction: true,
+      validators: customerSchema,
+      taintedMessage: "are you sure you want to exit?",
+      onSubmit: () => (loading = true),
+      onResult: ({ result }) => {
+        loading = false;
+        message = undefined;
+        if (result.type === "failure") {
+          message = result.data?.message;
+        }
+      },
+    }
+  );
 </script>
 
+<div>
+  hello
+  <p>{$form.fullName}</p>
+  <p>{$form.phoneNumber}</p>
+  <p>{$form.handle}</p>
+  <p>{$form.address}</p>
+  <p>{$form.cityId}</p>
+</div>
 <div class="flex justify-center mt-8">
   <div class="w-1/2 rounded bg-neutral-content">
     <div class="py-4 px-8 border-1 border-b border-b-neutral-700">
@@ -29,119 +55,78 @@
         {/if}
       </h2>
     </div>
-    <form
-      method="post"
-      class="flex flex-col gap-2 px-8 py-4"
-      use:enhance={() => {
-        loading = true;
-        return async ({ result }) => {
-          if (result.type === "failure") loading = false;
-
-          await applyAction(result);
-        };
-      }}
-    >
-      {#if headerError}
+    <form method="post" class="flex flex-col gap-2 px-8 py-4" use:enhance>
+      {#if message}
         <div class="alert alert-error w-full">
-          <span>{headerError}</span>
+          <Icon icon="mdi:alert" class="text-lg" />
+          {message}
         </div>
       {/if}
-
-      <div class="form-control w-full">
-        <label for="fullName" class="label">
-          <span class="label-text">Full Name</span>
-        </label>
-        <input
-          name="fullName"
+      <FormControl>
+        <span slot="top-label-text">Full Name</span>
+        <TextInput
           type="text"
-          required
-          class="w-full input {errors?.fullName
-            ? 'input-error'
-            : 'input-bordered'}"
-          value={customer?.fullName || ""}
+          bind:value={$form.fullName}
+          color={$errors.fullName ? "error" : ""}
         />
-        {#if errors?.fullName}
-          <label for="fullName" class="label">
-            <span class="label-text-alt text-error">{errors?.fullName[0]}</span>
-          </label>
-        {/if}
-      </div>
-      <div class="form-control w-full">
-        <label for="phoneNumber" class="label">
-          <span class="label-text">Phone Number</span>
-        </label>
-        <input
-          name="phoneNumber"
+        <span slot="bottom-label-text" class="text-error">
+          {#if $errors.fullName}
+            {$errors.fullName[0]}
+          {/if}
+        </span>
+      </FormControl>
+      <FormControl>
+        <span slot="top-label-text">Phone Number</span>
+        <TextInput
           type="text"
-          required
-          class="w-full input {errors?.phoneNumber
-            ? 'input-error'
-            : 'input-bordered'}"
-          value={customer?.phoneNumber || ""}
+          bind:value={$form.phoneNumber}
+          color={$errors.phoneNumber ? "error" : ""}
         />
-        {#if errors?.phoneNumber}
-          <label for="phoneNumber" class="label">
-            <span class="label-text-alt text-error"
-              >{errors?.phoneNumber[0]}</span
-            >
-          </label>
-        {/if}
-      </div>
-      <div class="form-control w-full">
-        <label for="handle" class="label">
-          <span class="label-text">Handle</span>
-        </label>
-        <input
-          name="handle"
+        <span slot="bottom-label-text" class="text-error">
+          {#if $errors.phoneNumber}
+            {$errors.phoneNumber[0]}
+          {/if}
+        </span>
+      </FormControl>
+      <FormControl>
+        <span slot="top-label-text">Handle</span>
+        <TextInput
           type="text"
-          required
-          class="w-full input {errors?.handle
-            ? 'input-error'
-            : 'input-bordered'}"
-          value={customer?.handle || ""}
+          bind:value={$form.handle}
+          color={$errors.handle ? "error" : ""}
         />
-        {#if errors?.handle}
-          <label for="handle" class="label">
-            <span class="label-text-alt text-error">{errors?.handle[0]}</span>
-          </label>
-        {/if}
-      </div>
-      <div class="form-control w-full">
-        <label for="address" class="label">
-          <span class="label-text">Address</span>
-        </label>
-        <input
-          name="address"
+        <span slot="bottom-label-text" class="text-error">
+          {#if $errors.handle}
+            {$errors.handle[0]}
+          {/if}
+        </span>
+      </FormControl>
+      <FormControl>
+        <span slot="top-label-text">Address</span>
+        <TextInput
           type="text"
-          required
-          class="w-full input {errors?.address
-            ? 'input-error'
-            : 'input-bordered'}"
-          value={customer?.address || ""}
+          bind:value={$form.address}
+          color={$errors.address ? "error" : ""}
         />
-        {#if errors?.address}
-          <label for="address" class="label">
-            <span class="label-text-alt text-error">{errors?.address[0]}</span>
-          </label>
-        {/if}
-      </div>
-      <input type="hidden" name="cityId" hidden bind:value={selectedCity} />
-      <div class="form-control">
-        <label for="cityId" class="label">
-          <span class="label-text">City</span>
-        </label>
+        <span slot="bottom-label-text" class="text-error">
+          {#if $errors.address}
+            {$errors.address[0]}
+          {/if}
+        </span>
+      </FormControl>
+      <FormControl>
+        <span slot="top-label-text">City</span>
         <CityAutoComplete
-          styleClass="w-full"
+          class="w-full"
           placeholderText=""
-          bind:selectedValue={selectedCity}
-          bind:searchValue={citySearchValue}
+          bind:selectedValue={$form.cityId}
         />
-        {#if errors?.cityId}
-          <label for="cityId" class="label">
-            <span class="label-text-alt text-error">{errors?.address[0]}</span>
-          </label>
-        {/if}
-      </div>
+        <span slot="bottom-label-text" class="text-error">
+          {#if $errors.cityId}
+            {$errors.cityId[0]}
+          {/if}
+        </span>
+      </FormControl>
       <Button
         {loading}
         loadingIcon="spinner"

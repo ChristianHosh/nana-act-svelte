@@ -3,7 +3,8 @@ export default {
   content: [
       './src/routes/**',
       './src/lib/ui/components/**',
-      './src/lib/ui/layout/**'
+      './src/lib/ui/layout/**',
+      './src/lib/dui/**/**',
   ],
   theme: {
     extend: {

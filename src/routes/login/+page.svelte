@@ -2,26 +2,20 @@
   import Button from "$lib/dui/action/Button.svelte";
   import FormControl from "$lib/dui/data-input/FormControl.svelte";
   import TextInput from "$lib/dui/data-input/TextInput.svelte";
-  import {superForm} from "sveltekit-superforms/client";
-  import {LoginSchema} from "$lib/core/models/user.model";
+  import { superForm } from "sveltekit-superforms/client";
+  import type { LoginSchema } from "$lib/core/models/user.model";
   import Icon from "@iconify/svelte";
+  import { loginSchema } from "$lib/core/models/user.model";
 
   // export let form;
   export let data;
-  let message: string | undefined;
 
-  const {form, errors, enhance} = superForm(data.form, {
+  const { form, errors, enhance, message } = superForm<LoginSchema>(data.form, {
     applyAction: true,
-    validators: LoginSchema,
+    validators: loginSchema,
     taintedMessage: "are you sure you want to exit?",
-    onSubmit: () => loading = true,
-    onResult: ({result}) => {
-      loading = false
-      message = undefined
-      if (result.type === 'failure'){
-        message = result.data?.message;
-      }
-    }
+    onSubmit: () => (loading = true),
+    onResult: () => (loading = false),
   });
 
   let loading: boolean = false;
@@ -36,42 +30,39 @@
     <div class="py-4 px-8 border-1 border-b border-b-neutral-700">
       <h2 class="text-3xl">Login</h2>
     </div>
-    <form
-      method="post"
-      class="flex flex-col gap-2 px-8 py-4"
-      use:enhance
-    >
-      {#if message}
-        <div class="alert alert-error">
+    <form method="post" class="flex flex-col gap-2 px-8 py-4" use:enhance>
+      {#if $message}
+        <div class="alert alert-error w-full">
           <Icon icon="mdi:alert" class="text-lg" />
-          {message}
+          username or password are incorrect
         </div>
       {/if}
-      <FormControl>
+      <FormControl field="username">
         <span slot="top-label-text">Username</span>
         <TextInput
-          type="text"
           name="username"
+          type="text"
           bind:value={$form.username}
           color={$errors.username ? "error" : ""}
+          aria-invalid={$errors.username ? true : undefined}
         />
         <span slot="bottom-label-text" class="text-error">
-          {#if ($errors?.username)}
+          {#if $errors?.username}
             {$errors?.username[0]}
           {/if}
         </span>
       </FormControl>
-      <FormControl>
+      <FormControl field="password">
         <span slot="top-label-text">Password</span>
         <TextInput
-                type="password"
-                name="password"
-                required
-                bind:value={$form.password}
-                color={$errors.password ? "error" : ""}
+          name="password"
+          type="password"
+          bind:value={$form.password}
+          color={$errors.password ? "error" : ""}
+          aria-invalid={$errors.password ? true : undefined}
         />
         <span slot="bottom-label-text" class="text-error">
-          {#if ($errors.password)}
+          {#if $errors.password}
             {$errors.password[0]}
           {/if}
         </span>

@@ -25,4 +25,7 @@
        bind:value={value}
        on:focus
        on:input
+       on:keyup
+       on:keydown
+       on:keypress
        {...$$restProps}>

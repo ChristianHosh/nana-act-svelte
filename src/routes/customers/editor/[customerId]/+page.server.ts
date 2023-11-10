@@ -2,7 +2,7 @@ import {fail, redirect} from "@sveltejs/kit";
 import {HttpClient} from "$lib/core/api/axiosInstance";
 import {AxiosError} from "axios";
 import type {Customer} from "$lib/core/models/customer.model";
-import {CustomerSchema} from "$lib/core/models/customer.model";
+import {customerSchema} from "$lib/core/models/customer.model";
 import type {AxiosResponse} from "axios";
 
 // @ts-ignore
@@ -32,7 +32,7 @@ export const actions = {
 
     const customerId = event.url.pathname.split("/")[3];
 
-    let customerRequest = CustomerSchema.safeParse({
+    let customerRequest = customerSchema.safeParse({
       fullName: formData.fullName,
       address: formData.address,
       phoneNumber: formData.phoneNumber,

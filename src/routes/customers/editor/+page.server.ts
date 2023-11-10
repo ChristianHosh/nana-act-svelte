@@ -1,52 +1,48 @@
-import { CustomerSchema } from "$lib/core/models/customer.model";
+import { customerSchema } from "$lib/core/models/customer.model";
 import { fail, redirect } from "@sveltejs/kit";
 import { AxiosError } from "axios";
 import { HttpClient } from "$lib/core/api/axiosInstance";
 import type { Customer } from "$lib/core/models/customer.model";
-import type { AxiosResponse } from "axios";
+import { superValidate } from "sveltekit-superforms/server";
+import {message} from "sveltekit-superforms/server";
+
+/** @type {import('./$types').PageServerLoad} */
+// @ts-ignore
+export async function load(event) {
+  const form = await superValidate(event, customerSchema);
+
+  return {
+    form,
+  };
+}
 
 // @ts-ignore
 export const actions = {
   default: async (event: any) => {
-    const formData = Object.fromEntries(await event.request.formData());
+    const form = await superValidate(event, customerSchema);
 
-    let customerRequest = CustomerSchema.safeParse({
-      fullName: formData.fullName,
-      address: formData.address,
-      phoneNumber: formData.phoneNumber,
-      handle: formData.handle,
-      cityId: Number(formData.cityId),
-    });
+    console.log("form ->", form.data);
 
-    if (!customerRequest.success) {
-      const { fieldErrors: errors } = customerRequest.error.flatten();
-      return fail(400, {
-        data: formData,
-        errors,
-        errorMessage: undefined,
-      });
-    }
+    if (!form.valid) return fail(400, { form });
 
-    let customerResponse: AxiosResponse<Customer> | undefined;
+    let customer: Customer | undefined;
     try {
-      customerResponse = await HttpClient.post<Customer>(
+      const customerResponse = await HttpClient.post<Customer>(
         "/customers",
-        customerRequest.data,
+        form.data,
         event.locals.user
       );
+
+      customer = customerResponse.data;
     } catch (e) {
-      if (e instanceof AxiosError) {
-        console.log('error => ', e.response?.data)
-        return fail(e.response?.status || 400, {
-          data: formData,
-          errors: undefined,
-          errorMessage: e.response?.data.message,
+      if (e instanceof AxiosError)
+        return message(form, {
+          text: e.response?.data.message,
+          status: e.response?.status || 500,
         });
-      }
-      return fail(500)
+      throw fail(500, { form });
     }
 
-    if (customerResponse)
-      throw redirect(307, `/customers/${customerResponse.data.id}`);
+    if (customer) throw redirect(307, `/customers/${customer.id}`);
   },
 };
