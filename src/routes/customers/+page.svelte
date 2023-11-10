@@ -25,7 +25,7 @@
     applySearchFilters(query);
   }
 
-  const applySearchFilters = (prevQuery?: URLSearchParams) => {
+  function applySearchFilters(prevQuery?: URLSearchParams){
     let query =
       prevQuery || new URLSearchParams($page.url.searchParams.toString());
 
@@ -35,7 +35,7 @@
     goto(`?${query.toString()}`);
   };
 
-  const resetSearchFilters = () => {
+  function resetSearchFilters() {
     let query = new URLSearchParams($page.url.searchParams.toString());
 
     nameParam = "";

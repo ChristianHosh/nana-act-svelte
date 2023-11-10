@@ -21,13 +21,7 @@
     }
   );
 
-  let cityIdValue: number;
   let loading = false;
-
-  $: () => {
-    console.log("city id: ", $form.cityId);
-    $form.cityId = cityIdValue;
-  };
 </script>
 
 <div class="flex justify-center mt-8">

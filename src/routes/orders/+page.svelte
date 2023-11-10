@@ -19,7 +19,7 @@
   let statusSearchParam: string;
   let statusSearchValue: string;
 
-  const applySearchFilters = (event?: CustomEvent) => {
+  function applySearchFilters(event?: CustomEvent) {
     let query = new URLSearchParams($page.url.searchParams.toString());
 
     if (orderFromSearchParam) query.set("order-from", orderFromSearchParam);
@@ -37,7 +37,7 @@
     goto(`?${query.toString()}`);
   };
 
-  const resetSearchFilters = () => {
+  function resetSearchFilters() {
     let query = new URLSearchParams($page.url.searchParams.toString());
 
     citySearchParam = "";
@@ -126,7 +126,7 @@
       <Pagination
         pageIndex={data.currentPage.number}
         totalPages={data.currentPage.totalPages}
-        pageSize={2}
+        pageSize={25}
         pageSizeOptions={[10, 25, 50]}
         showFirstLastButtons={true}
         on:pagechange={(event) => applySearchFilters(event)}
@@ -243,7 +243,7 @@
   }
 
   .badge-shein {
-    background-color: #db2777;
+    background-color: #e7438c;
   }
 
   .badge-iherb {

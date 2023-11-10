@@ -7,7 +7,6 @@
   import Icon from "@iconify/svelte";
   import { loginSchema } from "$lib/core/models/user.model";
 
-  // export let form;
   export let data;
 
   const { form, errors, enhance, message } = superForm<LoginSchema>(data.form, {
