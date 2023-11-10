@@ -6,7 +6,7 @@
   import FormControl from "$lib/dui/data-input/FormControl.svelte";
   import TextInput from "$lib/dui/data-input/TextInput.svelte";
   import Button from "$lib/dui/action/Button.svelte";
-  import CityAutocomplete from "../../test/CityAutocomplete.svelte";
+  import CityAutocomplete from "$lib/ui/components/CityAutocomplete.svelte";
 
   export let data;
 
