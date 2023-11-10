@@ -4,19 +4,20 @@ import type { Pageable } from "$lib/core/models/pageable.model";
 import type { Customer } from "$lib/core/models/customer.model";
 import { AxiosError } from "axios";
 import {DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE} from "$lib/core/consts";
+import type {PageServerLoadEvent} from "../../../.svelte-kit/types/src/routes/customers/$types";
 
 // @ts-ignore
-export async function load(event) {
-  let pageIndex: string = event.url.searchParams.get("page") || DEFAULT_PAGE_INDEX;
-  let pageSize: string = event.url.searchParams.get("size") || DEFAULT_PAGE_SIZE;
-  let nameSearch: string = event.url.searchParams.get("name");
-  let citySearch: string = event.url.searchParams.get("city");
+export async function load(event: PageServerLoadEvent) {
+  let page: string = event.url.searchParams.get("page") || DEFAULT_PAGE_INDEX;
+  let size: string = event.url.searchParams.get("size") || DEFAULT_PAGE_SIZE;
+  let name: string | null = event.url.searchParams.get("name");
+  let city: string | null  = event.url.searchParams.get("city");
 
   let params = {
-    page: pageIndex,
-    size: pageSize,
-    name: nameSearch,
-    city: citySearch,
+    page,
+    size,
+    name,
+    city,
   };
 
   try {

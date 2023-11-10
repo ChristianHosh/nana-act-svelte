@@ -1,6 +1,4 @@
-/** @type {import('./$types').LayoutServerLoad} */
-// @ts-ignore
-export function load({locals}) {
+export function load({locals} : {locals: App.Locals}) {
     return {
         user: locals.user
     };

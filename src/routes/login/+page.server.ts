@@ -1,14 +1,13 @@
 import { type Actions, fail, redirect } from "@sveltejs/kit";
-import type { RequestEvent } from "../../../.svelte-kit/types/src/routes/login/$types";
+import type {PageServerLoadEvent, RequestEvent} from "../../../.svelte-kit/types/src/routes/login/$types";
 import { loginSchema } from "$lib/core/models/user.model";
 import {message, superValidate} from "sveltekit-superforms/server";
 import { HttpClient } from "$lib/core/api/axiosInstance";
 import type { JwtToken } from "$lib/core/models/jwtToken.model";
 import { AxiosError } from "axios";
 
-/** @type {import('./$types').PageServerLoad} */
 // @ts-ignore
-export async function load(event) {
+export async function load(event: PageServerLoadEvent) {
   const form = await superValidate(event, loginSchema);
 
   return {
@@ -16,7 +15,6 @@ export async function load(event) {
   };
 }
 
-/** @type {import('./$types').Actions} */
 export const actions: Actions = {
   // @ts-ignore
   default: async (event: RequestEvent) => {
