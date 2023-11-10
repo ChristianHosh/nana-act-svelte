@@ -1,6 +1,7 @@
 <script lang="ts">
-  import Icon from "@iconify/svelte";
   import { createEventDispatcher } from "svelte";
+  import Dropdown from "$lib/dui/action/Dropdown.svelte";
+  import Button from "$lib/dui/action/Button.svelte";
 
   export let pageIndex: number = 0;
   export let pageSize: number = 10;
@@ -36,60 +37,56 @@
 
 <div class="join">
   {#if pageSizeOptions.length > 1}
-    <div class="dropdown join-item">
-      <label tabindex="0" class="btn btn-primary join-item">Page Size</label>
-      <ul
-        tabindex="0"
-        class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-      >
-        {#each pageSizeOptions as option}
-          <li>
-            <button
-              on:click={() => {
-                pageSize = option;
-                dispatchPageEvent();
-              }}
-            >
-              {option}
-            </button>
-          </li>
-        {/each}
-      </ul>
-    </div>
+    <Dropdown class="join-item" labelStyleClass="join-item">
+      <span slot="label">Page Size</span>
+      {#each pageSizeOptions as pageSizeOption}
+        <Button
+          class="justify-start"
+          color="ghost"
+          size="sm"
+          on:click={() => {
+            pageSize = pageSizeOption;
+            dispatchPageEvent();
+          }}
+        >
+          {pageSizeOption}
+        </Button>
+      {/each}
+    </Dropdown>
   {/if}
   {#if showFirstLastButtons}
-    <button
-      class="join-item btn btn-primary"
+    <Button
+      class="join-item"
+      color="primary"
       disabled={pageIndex <= 0}
+      icon="mdi:chevron-double-left"
       on:click={gotoFirstPage}
-    >
-      <Icon class="text-lg" icon="mdi:chevron-double-left" />
-    </button>
+    />
   {/if}
-  <button
-    class="join-item btn btn-primary"
+  <Button
+    class="join-item"
+    color="primary"
     disabled={pageIndex <= 0}
+    icon="mdi:chevron-left"
     on:click={gotoPrevPage}
-  >
-    <Icon class="text-lg" icon="mdi:chevron-left" />
-  </button>
-  <button class="join-item btn btn-ghost cursor-default no-animation"
-    >Page {pageIndex}</button
-  >
-  <button
-    class="join-item btn btn-primary"
+  />
+  <Button class="join-item cursor-default no-animation" color="ghost">
+    Page {pageIndex}
+  </Button>
+  <Button
+    class="join-item"
+    color="primary"
     disabled={pageIndex >= totalPages - 1}
+    icon="mdi:chevron-right"
     on:click={gotoNextPage}
-  >
-    <Icon class="text-lg" icon="mdi:chevron-right" />
-  </button>
+  />
   {#if showFirstLastButtons}
-    <button
-      class="join-item btn btn-primary"
+    <Button
+      class="join-item"
+      color="primary"
       disabled={pageIndex >= totalPages - 1}
+      icon="mdi:chevron-double-right"
       on:click={gotoLastPage}
-    >
-      <Icon class="text-lg" icon="mdi:chevron-double-right" />
-    </button>
+    />
   {/if}
 </div>

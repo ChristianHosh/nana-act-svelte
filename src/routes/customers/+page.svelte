@@ -1,27 +1,36 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-  import CitySelect from "$lib/ui/components/CityAutoComplete.svelte";
   import Pagination from "$lib/ui/components/Paginator.svelte";
   import Button from "$lib/dui/action/Button.svelte";
   import Collapse from "$lib/dui/data-display/Collapse.svelte";
+  import FormControl from "$lib/dui/data-input/FormControl.svelte";
+  import TextInput from "$lib/dui/data-input/TextInput.svelte";
+  import CityAutocomplete from "$lib/ui/components/CityAutocomplete.svelte";
 
   export let data;
 
-  let nameSearchParam: string;
-  let citySearchParam: string;
+  let nameParam: string;
+  let cityParam: number = 0;
   let citySearchValue: string;
 
-  const applySearchFilters = (event?: CustomEvent) => {
+  function onPageChange(event: CustomEvent) {
     let query = new URLSearchParams($page.url.searchParams.toString());
-
-    if (nameSearchParam) query.set("name", nameSearchParam);
-    if (citySearchParam) query.set("city", citySearchParam);
 
     if (event?.detail) {
       query.set("page", event.detail.pageIndex);
       query.set("size", event.detail.pageSize);
     }
+
+    applySearchFilters(query);
+  }
+
+  const applySearchFilters = (prevQuery?: URLSearchParams) => {
+    let query =
+      prevQuery || new URLSearchParams($page.url.searchParams.toString());
+
+    if (nameParam) query.set("name", nameParam);
+    if (cityParam != 0) query.set("city", cityParam.toString());
 
     goto(`?${query.toString()}`);
   };
@@ -29,9 +38,9 @@
   const resetSearchFilters = () => {
     let query = new URLSearchParams($page.url.searchParams.toString());
 
-    nameSearchParam = "";
-    citySearchParam = "";
+    nameParam = "";
     citySearchValue = "";
+    cityParam = 0;
 
     query.delete("name");
     query.delete("city");
@@ -54,25 +63,37 @@
     </div>
     <Collapse class="overflow-visible" color="base-200" closeable arrow>
       <span slot="title">Filter Customers</span>
-      <div class="flex flex-col">
+      <div class="flex flex-col gap-6">
         <div class="flex gap-4">
-          <div class="form-control">
-            <label class="label" for="username">
-              <span class="label-text"> Username or Handle </span>
-            </label>
-            <input class="input input-bordered" type="text" name="username" />
-          </div>
-          <div class="form-control">
-            <label class="label" for="city">
-              <span class="label-text"> City </span>
-            </label>
-            <CitySelect
-                    placeholderText=""
-                    bind:selectedValue={citySearchParam}
-                    bind:searchValue={citySearchValue}
-                    on:selectionchange={() => applySearchFilters()}
+          <FormControl field="username">
+            <span slot="top-label-text">Username or Handle</span>
+            <TextInput type="text" name="username" bind:value={nameParam} />
+          </FormControl>
+          <FormControl field="city">
+            <span slot="top-label-text">City</span>
+            <CityAutocomplete
+              bind:value={cityParam}
+              bind:autocompleteSearchValue={citySearchValue}
             />
-          </div>
+          </FormControl>
+        </div>
+        <div class="flex gap-4">
+          <Button
+            color="primary"
+            icon="mdi:search"
+            outline
+            on:click={() => applySearchFilters()}
+          >
+            Search
+          </Button>
+          <Button
+            color="secondary"
+            icon="mdi:clear-outline"
+            outline
+            on:click={() => resetSearchFilters()}
+          >
+            Clear
+          </Button>
         </div>
       </div>
     </Collapse>
@@ -85,10 +106,10 @@
       <Pagination
         pageIndex={data.currentPage.number}
         totalPages={data.currentPage.totalPages}
-        pageSize={2}
+        pageSize={25}
         pageSizeOptions={[10, 25, 50]}
-        showFirstLastButtons={true}
-        on:pagechange={(event) => applySearchFilters(event)}
+        showFirstLastButtons
+        on:pagechange={(event) => onPageChange(event)}
       />
     </div>
     <table class="table table-zebra">

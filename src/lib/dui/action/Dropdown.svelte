@@ -5,6 +5,9 @@
     export let open: boolean = false;
     export let hover: boolean = false;
     export let end: boolean = false;
+    export let labelStyleClass: string = "";
+
+    let _labelStyle = labelStyleClass;
 </script>
 
 <div
@@ -19,9 +22,9 @@
     class:dropdown-open={open}
 >
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-    <label for="" tabindex="0" class="btn m-1"><slot name="label" /></label>
+    <label for="" tabindex="0" class="btn {_labelStyle}"><slot name="label" /></label>
     <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-    <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+    <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-10">
         <slot />
     </ul>
 
