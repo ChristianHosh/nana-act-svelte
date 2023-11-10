@@ -7,7 +7,6 @@
   import TextInput from "$lib/dui/data-input/TextInput.svelte";
   import Button from "$lib/dui/action/Button.svelte";
   import CityAutocomplete from "../../test/CityAutocomplete.svelte";
-  import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
 
   export let data;
 
@@ -32,7 +31,6 @@
 </script>
 
 <div class="flex justify-center mt-8">
-  <SuperDebug data={form} />
   <div class="w-1/2 rounded bg-neutral-content">
     <div class="py-4 px-8 border-1 border-b border-b-neutral-700">
       <h2 class="text-3xl uppercase">Create New Customer</h2>
