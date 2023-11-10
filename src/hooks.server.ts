@@ -4,7 +4,7 @@ import {redirect, type RequestEvent} from "@sveltejs/kit";
 // @ts-ignore
 export async function handle({ event, resolve }: {event: RequestEvent}) {
   const jwt = event.cookies.get("jwt-token");
-  event.locals.user = jwt ? jwt : null;
+  event.locals.user = jwt ? jwt : undefined;
 
   if (!event.url.pathname.startsWith("/login")){
     if (!event.locals.user){
