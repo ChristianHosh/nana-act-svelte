@@ -1,21 +1,21 @@
-export const SITE_LIST = [
-    "SHEIN",
-    "IHERB",
-    "ASOS",
-    "NEXt",
-    "AMAZON",
-    "MODANISA",
-    "TRENDIOL",
-    "LADYMAKEUP"
-];
+export enum Site {
+    SHEIN = "SHEIN",
+    IHERB = "IHERB",
+    ASOS = "ASOS",
+    NEXT = "NEXT",
+    AMAZON = "AMAZON",
+    MODANISA = "MODANISA",
+    TRENDIOL = "TRENDIOL",
+    LADYMAKEUP = "LADYMAKEUP"
+}
 
-export const STATUS_LIST = [
-    "ORDERED",
-    "PROCESSING",
-    "COMPLETED",
-    "CANCELED",
-    "RETURNED"
-];
+export enum Status {
+    ORDERED = "ORDERED",
+    PROCESSING = "PROCESSING",
+    COMPLETED = "COMPLETED",
+    CANCELED = "CANCELED",
+    RETURNED = "RETURNED"
+}
 
 export const DEFAULT_PAGE_SIZE = "25";
 export const DEFAULT_PAGE_INDEX = "0";

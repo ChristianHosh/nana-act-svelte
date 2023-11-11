@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let field: string;
+  export let field: string = "";
 </script>
 
 <div class={$$props.class} class:form-control={true}>

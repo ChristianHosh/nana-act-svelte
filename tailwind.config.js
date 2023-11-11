@@ -4,6 +4,7 @@ export default {
       './src/routes/**',
       './src/lib/ui/components/**',
       './src/lib/ui/layout/**',
+      './src/lib/editors/**',
       './src/lib/dui/**/**',
   ],
   theme: {

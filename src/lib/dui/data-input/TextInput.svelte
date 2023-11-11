@@ -4,7 +4,7 @@
     export let color: ColorString = "";
     export let size: SizeString = "md";
     export let bordered: boolean = true;
-    export let value: string = "";
+    export let value: any;
 </script>
 
 <input class={$$props.class}

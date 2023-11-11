@@ -1,11 +1,8 @@
 <script lang="ts">
-  import Icon from "@iconify/svelte";
   import Pagination from "$lib/ui/components/Paginator.svelte";
   import Time from "svelte-time";
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
-  import CityAutoComplete from "$lib/ui/components/CityAutoComplete.svelte";
-  import StatusSelect from "$lib/ui/components/StatusSelect.svelte";
   import Button from "$lib/dui/action/Button.svelte";
 
   export let data;
@@ -35,7 +32,7 @@
     }
 
     goto(`?${query.toString()}`);
-  };
+  }
 
   function resetSearchFilters() {
     let query = new URLSearchParams($page.url.searchParams.toString());
@@ -57,7 +54,7 @@
     query.delete("ship-to");
 
     goto(`?${query.toString()}`);
-  };
+  }
 </script>
 
 <svelte:head>
@@ -69,53 +66,9 @@
     class="mb-2 py-4 px-2 bg-neutral-content shadow shadow-black flex flex-col gap-4"
   >
     <div class="flex">
-      <a href="/orders/editor" class="btn btn-primary">
-        <Icon class="text-lg" icon="mdi:add" />
-        Create New Order
-      </a>
-    </div>
-    <div class="flex justify-between">
-      <div class="join flex flex-1">
-        <button class="btn join-item" on:click={() => applySearchFilters()}>
-          <Icon class="text-lg" icon="mdi:search" />
-          Search
-        </button>
-        <div class="indicator">
-          <span class="indicator-item indicator-center badge badge-accent"
-            >City</span
-          >
-          <CityAutoComplete
-            placeholderText="Filter by City"
-            styleClass="join-item"
-            bind:selectedValue={citySearchParam}
-            bind:searchValue={citySearchValue}
-            on:selectionchange={() => applySearchFilters()}
-          />
-        </div>
-        <div class="indicator">
-          <span class="indicator-item indicator-center badge badge-accent"
-            >Status</span
-          >
-          <StatusSelect
-            placeholderText="Filter by Status"
-            styleClass="join-item"
-            bind:selectedValue={statusSearchParam}
-            bind:searchValue={statusSearchValue}
-            on:selectionchange={() => applySearchFilters()}
-          />
-        </div>
-        <input
-          class="join-item input input-bordered w-fit"
-          placeholder="Ordered After"
-          type="date"
-          bind:value={orderFromSearchParam}
-          on:change={() => applySearchFilters()}
-        />
-        <button class="btn join-item" on:click={() => resetSearchFilters()}>
-          <Icon class="text-lg" icon="mdi:backspace-outline" />
-          Clear
-        </button>
-      </div>
+      <Button linkTo="/orders/editor" color="primary" icon="mdi:add">
+        Create new order
+      </Button>
     </div>
   </div>
   <div

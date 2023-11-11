@@ -33,7 +33,7 @@
       {#if $message}
         <div class="alert alert-error w-full">
           <Icon icon="mdi:alert" class="text-lg" />
-          username or password are incorrect
+          {$message.text}
         </div>
       {/if}
       <FormControl field="username">
