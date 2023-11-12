@@ -20,6 +20,10 @@
     <table class="info-table">
       <tbody>
         <tr>
+          <td class="font-medium capitalize">ID:</td>
+          <td class="capitalize"># {customer.id}</td>
+        </tr>
+        <tr>
           <td class="font-medium capitalize">Address:</td>
           <td class="capitalize">{customer.city.name}, {customer.address}</td>
         </tr>

@@ -3,9 +3,10 @@ import { HttpClient } from "$lib/core/api/axiosInstance";
 import type { CustomerProfile } from "$lib/core/models/customerProfile.model";
 import { AxiosError } from "axios";
 import type { Customer } from "$lib/core/models/customer.model";
+import type {PageServerLoadEvent} from "../../../../.svelte-kit/types/src/routes/customers/[customerId]/$types";
 
 // @ts-ignore
-export async function load(event) {
+export async function load(event: PageServerLoadEvent) {
   let customerId = event.url.pathname.split("/")[2];
 
   try {

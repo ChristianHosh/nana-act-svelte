@@ -52,6 +52,7 @@
     $form.commission = order.commission;
     $form.site = order.site;
     $form.note = order.note;
+    $form.orderDate = new Date(order.orderDate);
     customerAutocompleteSearch = order.customer.fullName;
     siteAutocompleteSearch = order.site.toString();
   }
