@@ -10,8 +10,9 @@
 
   export let data;
 
-  let nameParam: string;
-  let cityParam: number = 0;
+  let nameParam = $page.url.searchParams.get("name");
+  let idParam = $page.url.searchParams.get("id");
+  let cityParam = Number($page.url.searchParams.get("city"));
   let citySearchValue: string;
 
   function onPageChange(event: CustomEvent) {
@@ -30,22 +31,26 @@
       prevQuery || new URLSearchParams($page.url.searchParams.toString());
 
     if (nameParam) query.set("name", nameParam);
+    if (idParam) query.set("id", idParam);
     if (cityParam != 0) query.set("city", cityParam.toString());
 
     goto(`?${query.toString()}`);
-  };
+  }
 
   function resetSearchFilters() {
     let query = new URLSearchParams($page.url.searchParams.toString());
 
     nameParam = "";
+    idParam = "";
     citySearchValue = "";
     cityParam = 0;
 
     query.delete("name");
     query.delete("city");
+    query.delete("id")
     goto(`?${query.toString()}`);
-  };
+  }
+
 </script>
 
 <svelte:head>
@@ -65,8 +70,12 @@
       <span slot="title">Filter Customers</span>
       <div class="flex flex-col gap-6">
         <div class="flex gap-4">
+          <FormControl field="id">
+            <span slot="top-label-text">ID</span>
+            <TextInput type="number" name="id" bind:value={idParam} />
+          </FormControl>
           <FormControl field="username">
-            <span slot="top-label-text">Username or Handle</span>
+            <span slot="top-label-text">Name or Handle</span>
             <TextInput type="text" name="username" bind:value={nameParam} />
           </FormControl>
           <FormControl field="city">
