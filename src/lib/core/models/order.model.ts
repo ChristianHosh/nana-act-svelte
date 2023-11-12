@@ -1,6 +1,6 @@
 import type { Customer } from "$lib/core/models/customer.model";
 import { z } from "zod";
-import { Site, Status } from "$lib/core/consts";
+import { Site, siteList, Status } from "$lib/core/consts";
 
 export interface Order {
   creationTimestamp: number;
@@ -24,7 +24,7 @@ export const orderSchema = z.object({
       invalid_type_error: "customer is required",
     })
     .min(1, "customer is required"),
-  site: z.nativeEnum(Site, {
+  site: z.enum(["", ...siteList], {
     required_error: "site is required",
     invalid_type_error: "invalid site",
   }),

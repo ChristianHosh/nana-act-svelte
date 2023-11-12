@@ -175,6 +175,7 @@
 </div>
 
 <style>
+
   .badge-ordered {
     background-color: hsl(var(--in));
   }

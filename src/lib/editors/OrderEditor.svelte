@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Order, OrderSchema } from "$lib/core/models/order.model";
-  import { intProxy, superForm } from "sveltekit-superforms/client";
+  import {dateProxy, intProxy, superForm} from "sveltekit-superforms/client";
+  import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
   import { orderSchema } from "$lib/core/models/order.model";
   import Icon from "@iconify/svelte";
   import FormControl from "$lib/dui/data-input/FormControl.svelte";
@@ -8,12 +9,15 @@
   import Button from "$lib/dui/action/Button.svelte";
   import TextInput from "$lib/dui/data-input/TextInput.svelte";
   import Range from "$lib/dui/data-input/Range.svelte";
+  import SiteAutocomplete from "$lib/ui/components/SiteAutocomplete.svelte";
+  import {page} from "$app/stores";
 
   export let data;
   export let order: Order | undefined = undefined;
 
   let loading: boolean = false;
   let customerAutocompleteSearch: string = "";
+  let siteAutocompleteSearch: string = "";
 
   const { form, errors, enhance, message } = superForm<OrderSchema>(data.form, {
     applyAction: true,
@@ -23,21 +27,23 @@
     onResult: () => (loading = false),
   });
 
+  function handleProfitPercentageChange() {
+    if ($form.usePercentage) {
+      $form.profit = Number(($form.profitPercentage * $form.cost).toFixed(2));
+    }
+  }
+
   const costProxy = intProxy(form, "cost");
   const profitProxy = intProxy(form, "profit");
   const commissionProxy = intProxy(form, "commission");
+  const orderDateProxy = dateProxy(form, 'orderDate', { format: 'date' });
 
   $form.usePercentage = false;
   $form.profitPercentage = 0.05;
   $form.commission = 0;
   $form.profit = 0;
   $form.cost = 0;
-
-  function handleProfitPercentageChange() {
-    if ($form.usePercentage){
-      $form.profit = Number(($form.profitPercentage * $form.cost).toFixed(2));
-    }
-  }
+  $form.note = "";
 
   if (order) {
     $form.customerId = order.customer.id;
@@ -47,10 +53,19 @@
     $form.site = order.site;
     $form.note = order.note;
     customerAutocompleteSearch = order.customer.fullName;
+    siteAutocompleteSearch = order.site.toString();
+  }
+
+  const forCustomer = $page.url.searchParams.get('for-customer');
+  const forCustomerName = $page.url.searchParams.get('customer');
+  if (forCustomer && forCustomerName){
+    $form.customerId = Number(forCustomer);
+    customerAutocompleteSearch = forCustomerName;
   }
 </script>
 
 <div class="flex justify-center mt-8">
+  <SuperDebug data={$form} />
   <div class="w-1/2 rounded bg-neutral-content">
     <div class="py-4 px-8 border-1 border-b border-b-neutral-700">
       <h2 class="text-3xl uppercase">
@@ -79,6 +94,36 @@
           <span slot="bottom-label-text" class="text-error">
             {#if $errors?.customerId}
               {$errors?.customerId[0]}
+            {/if}
+          </span>
+        </FormControl>
+        <FormControl field="site">
+          <span slot="top-label-text">Site</span>
+          <SiteAutocomplete
+            inputStyleClass="w-full"
+            class="w-full"
+            name="site"
+            bind:value={$form.site}
+            bind:autocompleteSearchValue={siteAutocompleteSearch}
+          />
+          <span slot="bottom-label-text" class="text-error">
+            {#if $errors?.site}
+              {$errors?.site[0]}
+            {/if}
+          </span>
+        </FormControl>
+        <FormControl field="orderDate">
+          <span slot="top-label-text">Order Date</span>
+          <TextInput
+            type="date"
+            name="orderDate"
+            bind:value={$orderDateProxy}
+            color={$errors.orderDate ? "error" : ""}
+            aria-invalid={$errors.orderDate ? true : undefined}
+          />
+          <span slot="bottom-label-text" class="text-error">
+            {#if $errors?.orderDate}
+              {$errors?.orderDate[0]}
             {/if}
           </span>
         </FormControl>
