@@ -97,12 +97,10 @@
         use:enhance={() => {
           isDeleting = true;
           return async ({ result }) => {
-            isDeleting = false;
             await applyAction(result);
           };
         }}
       >
-        <input name="id" type="hidden" hidden value={customer.id} />
         <Button
           color="error"
           type="submit"
