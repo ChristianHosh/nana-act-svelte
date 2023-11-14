@@ -133,6 +133,7 @@
           <TextInput
             name="cost"
             type="number"
+            min="0"
             bind:value={$costProxy}
             color={$errors.cost ? "error" : ""}
             aria-invalid={$errors.cost ? true : undefined}
@@ -149,6 +150,7 @@
           <TextInput
             name="profit"
             type="number"
+            min="0"
             bind:value={$profitProxy}
             color={$errors.profit ? "error" : ""}
             aria-invalid={$errors.profit ? true : undefined}
@@ -199,6 +201,7 @@
           <TextInput
             name="commission"
             type="number"
+            min="0"
             bind:value={$commissionProxy}
             color={$errors.commission ? "error" : ""}
             aria-invalid={$errors.commission ? true : undefined}

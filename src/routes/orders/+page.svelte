@@ -17,8 +17,19 @@
   let statusSearchParam: string;
   let statusSearchValue: string;
 
-  function applySearchFilters(event?: CustomEvent) {
+  function onPageChange(event: CustomEvent) {
     let query = new URLSearchParams($page.url.searchParams.toString());
+
+    if (event?.detail) {
+      query.set("page", event.detail.pageIndex);
+      query.set("size", event.detail.pageSize);
+    }
+
+    applySearchFilters(query);
+  }
+
+  function applySearchFilters(prevQuery?: URLSearchParams) {
+    let query = prevQuery || new URLSearchParams();
 
     if (orderFromSearchParam) query.set("order-from", orderFromSearchParam);
     if (orderToSearchParam) query.set("order-to", orderToSearchParam);
@@ -26,11 +37,6 @@
     if (shipToSearchParam) query.set("ship-to", shipToSearchParam);
     if (citySearchParam) query.set("city", citySearchParam);
     if (statusSearchParam) query.set("status", statusSearchParam);
-
-    if (event?.detail) {
-      query.set("page", event.detail.pageIndex);
-      query.set("size", event.detail.pageSize);
-    }
 
     goto(`?${query.toString()}`);
   }
@@ -83,7 +89,7 @@
         pageSize={25}
         pageSizeOptions={[10, 25, 50]}
         showFirstLastButtons={true}
-        on:pagechange={(event) => applySearchFilters(event)}
+        on:pagechange={(event) => onPageChange(event)}
       />
     </div>
     <table class="table table-zebra">
@@ -176,7 +182,6 @@
 </div>
 
 <style>
-
   .badge-ordered {
     background-color: hsl(var(--in));
   }

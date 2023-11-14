@@ -6,7 +6,6 @@ import type { Order } from "$lib/core/models/order.model";
 import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from "$lib/core/consts";
 import type { PageServerLoadEvent } from "../../../.svelte-kit/types/src/routes/orders/$types";
 
-// @ts-ignore
 export async function load(event: PageServerLoadEvent) {
   let pageIndex: string =
     event.url.searchParams.get("page") || DEFAULT_PAGE_INDEX;

@@ -6,8 +6,6 @@
   export let icon: string | undefined = undefined;
 
   let _colorClass = `text-${color}`;
-
-  console.log(_colorClass)
 </script>
 
 <div class={$$props.class} class:stat={true}>
@@ -25,7 +23,15 @@
     <slot name="title" />
   </div>
   <div
-    class="stat-value {_colorClass}">
+    class="stat-value"
+    class:text-primary={color === 'primary'}
+    class:text-secondary={color === 'secondary'}
+    class:text-accent={color === 'accent'}
+    class:text-info={color === 'info'}
+    class:text-success={color === 'success'}
+    class:text-warning={color === 'warning'}
+    class:text-error={color === 'error'}
+  >
     <slot name="value" />
   </div>
   <div class="stat-desc">

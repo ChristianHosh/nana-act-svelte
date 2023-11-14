@@ -1,166 +1,190 @@
 <script lang="ts">
-  import { applyAction, enhance } from "$app/forms";
+  import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
+  import { currency } from "$lib/core/util";
+  import Paginator from "$lib/ui/components/Paginator.svelte";
   import Time from "svelte-time";
   import Button from "$lib/dui/action/Button.svelte";
-  import Stat from "$lib/dui/data-display/Stat.svelte";
-  import {currency} from "$lib/core/util";
 
   export let data;
 
-  let isDeleting: boolean = false;
-  $: customerProfile = data.customerProfile;
-  $: customer = customerProfile.customer;
+  $: customer = data.customer;
+
+  let idParam: string;
+
+  function onPageChange(event: CustomEvent) {
+    let query = new URLSearchParams($page.url.searchParams.toString());
+
+    if (event?.detail) {
+      query.set("page", event.detail.pageIndex);
+      query.set("size", event.detail.pageSize);
+    }
+
+    applySearchFilters(query);
+  }
+
+  function applySearchFilters(prevQuery?: URLSearchParams){
+    let query =
+            prevQuery || new URLSearchParams($page.url.searchParams.toString());
+
+    if (idParam) query.set("id", idParam);
+
+    goto(`?${query.toString()}`);
+  }
+
 </script>
 
-<svelte:head>
-  <title>Nana - {customer.fullName}</title>
-</svelte:head>
-
-<div class="px-4 flex flex-col gap-4">
-  <div class="flex gap-4">
-    <div>
-      <h1 class="text-2xl mb-2 capitalize">{customer.fullName}</h1>
-      <table class="info-table">
-        <tbody>
+<div
+  class="flex flex-col justify-center pt-4 shadow-md shadow-gray-500 bg-base-100/50"
+>
+  <div class="flex justify-between px-4 mb-4">
+    <h1 class="text-2xl">Orders</h1>
+    <Paginator
+      pageIndex={data.currentPage.number}
+      totalPages={data.currentPage.totalPages}
+      pageSize={25}
+      pageSizeOptions={[10, 25, 50]}
+      showFirstLastButtons={true}
+      on:pagechange={(event) => onPageChange(event)}
+    />
+  </div>
+  <table class="table table-zebra">
+    <thead>
+      <tr class="text-lg">
+        <th>#</th>
+        <th>Site</th>
+        <th>Cost</th>
+        <th>Profit</th>
+        <th>Commission</th>
+        <th>Status</th>
+        <th>Order Date</th>
+        <th>Ship Date</th>
+        <th>Amount to Pay</th>
+        <th>Amount Paid</th>
+        <th />
+      </tr>
+    </thead>
+    <tbody>
+      {#each data.currentPage.content as order}
         <tr>
-          <td class="font-medium capitalize">ID:</td>
-          <td class="capitalize"># {customer.id}</td>
-        </tr>
-        <tr>
-          <td class="font-medium capitalize">Address:</td>
-          <td class="capitalize">{customer.city.name}, {customer.address}</td>
-        </tr>
-        <tr>
-          <td class="font-medium capitalize">Phone Number:</td>
-          <td>{customer.phoneNumber}</td>
-        </tr>
-        <tr>
-          <td class="font-medium capitalize">Handle:</td>
           <td>
-            <a
-                    class="link"
-                    href="https://instagram.com/{customer.handle}/"
-                    target="_blank"
-            >
-              {customer.handle}
-            </a>
+            <span>{order.id}</span>
           </td>
-        </tr>
-        <tr>
-          <td class="font-medium capitalize">Created At:</td>
-          <td class="capitalize">
-            <Time
-                    format="DD/MM/YYYY h:mm A"
-                    timestamp={customer.creationTimestamp}
+          <td>
+            <span class={`badge badge-${order.site.toLowerCase()}`}>
+              {order.site}
+            </span>
+          </td>
+          <td>
+            <span>{currency(order.cost)}</span>
+          </td>
+          <td>
+            <span>{currency(order.profit)}</span>
+          </td>
+          <td>
+            <span>{currency(order.commission)}</span>
+          </td>
+          <td>
+            <span class={`badge badge-${order.status.toLowerCase()}`}>
+              {order.status}
+            </span>
+          </td>
+          <td>
+            <span>
+              <Time format="DD/MM/YYYY" timestamp={order.orderDate} />
+            </span>
+          </td>
+          <td>
+            <span class:text-error={!order.shipDate}>
+              {#if order.shipDate}
+                <Time format="DD/MM/YYYY" timestamp={order.shipDate} />
+              {:else}
+                Not Shipped
+              {/if}
+            </span>
+          </td>
+          <td>
+            <span>{currency(order.cost + order.profit + order.commission)}</span>
+          </td>
+          <td>
+              {#if order.payment}
+                <span>{currency(order.payment.amount)}</span>
+              {:else}
+                <span class="text-error">Not Paid</span>
+              {/if}
+          </td>
+          <td>
+            <Button
+              linkTo={`/orders/${order.id}`}
+              icon="mdi:book-open-outline"
+              color="primary"
+              circle
             />
           </td>
         </tr>
+      {:else}
         <tr>
-          <td class="font-medium capitalize">Updated At:</td>
-          <td class="capitalize">
-            <Time
-                    format="DD/MM/YYYY h:mm A"
-                    timestamp={customer.updateTimestamp}
-            />
+          <td colspan="8">
+            <span class="text-error text-lg font-bold">
+              No orders available
+            </span>
           </td>
         </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="mt-12 stats shadow">
-      <Stat color="success">
-        <span slot="title">Paid</span>
-        <span slot="value">{currency(customerProfile.paidTotal)}</span>
-        <span slot="description">Total paid amount</span>
-      </Stat>
-      <Stat color="error">
-        <span slot="title">Debt</span>
-        <span slot="value">{currency(customerProfile.debtTotal)}</span>
-        <span slot="description">Total unpaid amount</span>
-      </Stat>
-      <Stat color="info">
-        <span slot="title">Total</span>
-        <span slot="value">{currency(customerProfile.allOrdersTotal)}</span>
-        <span slot="description">All orders total</span>
-      </Stat>
-      <Stat color="accent">
-        <span slot="title">Cost</span>
-        <span slot="value">{currency(customerProfile.allOrdersCost)}</span>
-        <span slot="description">All orders cost</span>
-      </Stat>
-      <Stat color="primary">
-        <span slot="title">Profit</span>
-        <span slot="value">{currency(customerProfile.allOrdersProfit)}</span>
-        <span slot="description">All orders profit</span>
-      </Stat>
-      <Stat color="secondary">
-        <span slot="title">Commission</span>
-        <span slot="value">{currency(customerProfile.allOrdersCommission)}</span>
-        <span slot="description">All orders commission</span>
-      </Stat>
-    </div>
-  </div>
-  <div>
-    <div
-      class="mb-2 py-4 px-2 bg-neutral-content shadow shadow-black flex flex-col gap-4"
-    >
-      <div class="flex">
-        <Button
-          linkTo={`/orders/editor?for-customer=${customer.id}&customer=${customer.fullName}`}
-          color="primary"
-          icon="mdi:add"
-        >
-          Create new order
-        </Button>
-      </div>
-    </div>
-    <table />
-  </div>
-  <div class="rounded border-error border-2 px-4 py-2">
-    <h3 class="text-2xl mb-2">Danger Zone</h3>
-    <div class="flex gap-4">
-      <Button
-        linkTo={`/customers/editor/${customer.id}`}
-        color="secondary"
-        outline
-        class="capitalize"
-      >
-        Edit '{customer.fullName}'
-      </Button>
-      <form
-        method="post"
-        action="?/delete"
-        use:enhance={() => {
-          isDeleting = true;
-          return async ({ result }) => {
-            await applyAction(result);
-          };
-        }}
-      >
-        <Button
-          color="error"
-          type="submit"
-          loading={isDeleting}
-          loadingIcon="spinner"
-        >
-          {#if isDeleting}
-            Deleting '{customer.fullName}'
-          {:else}
-            Delete '{customer.fullName}'
-          {/if}
-        </Button>
-      </form>
-    </div>
-  </div>
+      {/each}
+    </tbody>
+  </table>
 </div>
 
 <style>
-  .info-table > tbody > tr {
-    padding-bottom: 0.25rem;
-    border-bottom: 1px solid rgb(128, 128, 128);
+  .badge-ordered {
+    background-color: hsl(var(--in));
   }
 
-  .info-table > tbody > tr > td {
-    padding-right: 1rem;
+  .badge-processing {
+    background-color: hsl(var(--s));
+  }
+
+  .badge-completed {
+    background-color: hsl(var(--su));
+  }
+
+  .badge-returned {
+    background-color: hsl(var(--wa));
+  }
+
+  .badge-canceled {
+    background-color: hsl(var(--er));
+  }
+
+  .badge-shein {
+    background-color: #e7438c;
+  }
+
+  .badge-iherb {
+    background-color: #ec4899;
+  }
+
+  .badge-asos {
+    background-color: #f472b6;
+  }
+
+  .badge-next {
+    background-color: #c026d3;
+  }
+
+  .badge-amazon {
+    background-color: #d946ef;
+  }
+
+  .badge-modanisa {
+    background-color: #e879f9;
+  }
+
+  .badge-trendiol {
+    background-color: #9333ea;
+  }
+
+  .badge-ladymakeup {
+    background-color: #a855f7;
   }
 </style>

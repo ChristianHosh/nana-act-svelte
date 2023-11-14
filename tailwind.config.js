@@ -5,7 +5,9 @@ export default {
       './src/lib/ui/components/**',
       './src/lib/ui/layout/**',
       './src/lib/editors/**',
-      './src/lib/dui/**/**',
+      './src/lib/dui/action/**',
+      './src/lib/dui/data-display/**',
+      './src/lib/dui/data-input/**',
   ],
   theme: {
     extend: {

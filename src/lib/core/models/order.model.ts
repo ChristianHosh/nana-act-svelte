@@ -1,6 +1,7 @@
 import type { Customer } from "$lib/core/models/customer.model";
 import { z } from "zod";
 import { Site, siteList, Status } from "$lib/core/consts";
+import type {Payment} from "$lib/core/models/payment.model";
 
 export interface Order {
   creationTimestamp: number;
@@ -15,6 +16,7 @@ export interface Order {
   shipDate: number;
   note: string;
   customer: Customer;
+  payment?: Payment;
 }
 
 export const orderSchema = z.object({
