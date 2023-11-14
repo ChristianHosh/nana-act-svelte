@@ -185,51 +185,39 @@
   .badge-ordered {
     background-color: hsl(var(--in));
   }
-
   .badge-processing {
     background-color: hsl(var(--s));
   }
-
   .badge-completed {
     background-color: hsl(var(--su));
   }
-
   .badge-returned {
     background-color: hsl(var(--wa));
   }
-
   .badge-canceled {
     background-color: hsl(var(--er));
   }
-
   .badge-shein {
     background-color: #e7438c;
   }
-
   .badge-iherb {
     background-color: #ec4899;
   }
-
   .badge-asos {
     background-color: #f472b6;
   }
-
   .badge-next {
     background-color: #c026d3;
   }
-
   .badge-amazon {
     background-color: #d946ef;
   }
-
   .badge-modanisa {
     background-color: #e879f9;
   }
-
   .badge-trendiol {
     background-color: #9333ea;
   }
-
   .badge-ladymakeup {
     background-color: #a855f7;
   }
