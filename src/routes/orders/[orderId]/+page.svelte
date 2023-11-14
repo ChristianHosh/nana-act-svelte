@@ -2,6 +2,7 @@
   import { applyAction, enhance } from "$app/forms";
   import Time from "svelte-time";
   import Button from "$lib/dui/action/Button.svelte";
+  import {currency} from "$lib/core/util.js";
 
   export let data;
 
@@ -14,30 +15,31 @@
 </svelte:head>
 
 <div class="px-4 flex flex-col gap-4">
-  <div class="py-4 mb-4">
-    <h1 class="text-2xl mb-2">
-      <a class="link" href={`/customers/${order.customer.id}`}>
-        {order.customer.fullName}'s
-      </a>
-      Order
-    </h1>
-    <table class="info-table">
-      <tbody>
+  <div class="flex">
+    <div>
+      <h1 class="text-2xl mb-2">
+        <a class="link" href={`/customers/${order.customer.id}`}>
+          {order.customer.fullName}'s
+        </a>
+        Order
+      </h1>
+      <table class="info-table">
+        <tbody>
         <tr>
           <td class="font-medium capitalize">ID:</td>
           <td># {order.id}</td>
         </tr>
         <tr>
           <td class="font-medium capitalize">Cost:</td>
-          <td>₪ {order.cost.toFixed(2)}</td>
+          <td>{currency(order.cost)}</td>
         </tr>
         <tr>
           <td class="font-medium capitalize">Profit:</td>
-          <td>₪ {order.profit.toFixed(2)}</td>
+          <td>{currency(order.profit)}</td>
         </tr>
         <tr>
           <td class="font-medium capitalize">Commission:</td>
-          <td>₪ {order.commission.toFixed(2)}</td>
+          <td>{currency(order.commission)}</td>
         </tr>
         <tr>
           <td class="font-medium capitalize">Site:</td>
@@ -67,8 +69,8 @@
           <td class="font-medium capitalize">Created At:</td>
           <td class="capitalize">
             <Time
-              format="DD/MM/YYYY h:mm A"
-              timestamp={order.creationTimestamp}
+                    format="DD/MM/YYYY h:mm A"
+                    timestamp={order.creationTimestamp}
             />
           </td>
         </tr>
@@ -76,16 +78,17 @@
           <td class="font-medium capitalize">Updated At:</td>
           <td class="capitalize">
             <Time
-              format="DD/MM/YYYY h:mm A"
-              timestamp={order.updateTimestamp}
+                    format="DD/MM/YYYY h:mm A"
+                    timestamp={order.updateTimestamp}
             />
           </td>
         </tr>
-      </tbody>
-    </table>
-  </div>
-  <div>
-    <table />
+        </tbody>
+      </table>
+    </div>
+    <div>
+
+    </div>
   </div>
   <div class="rounded border-error border-2 px-4 py-2">
     <h3 class="text-2xl mb-2">Danger Zone</h3>

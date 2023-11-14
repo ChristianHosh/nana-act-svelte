@@ -4,6 +4,7 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import Button from "$lib/dui/action/Button.svelte";
+  import {currency} from "$lib/core/util.js";
 
   export let data;
 
@@ -113,13 +114,13 @@
               </span>
             </td>
             <td>
-              <span>₪ {order.cost.toFixed(2)}</span>
+              <span>{currency(order.cost)}</span>
             </td>
             <td>
-              <span>₪ {order.profit.toFixed(2)}</span>
+              <span>{currency(order.profit)}</span>
             </td>
             <td>
-              <span>₪ {order.commission.toFixed(2)}</span>
+              <span>{currency(order.commission)}</span>
             </td>
             <td>
               <span class={`badge badge-${order.status.toLowerCase()}`}>
@@ -163,9 +164,9 @@
         {:else}
           <tr>
             <td colspan="8">
-              <span class="text-error text-lg font-bold"
-                >No orders available</span
-              >
+              <span class="text-error text-lg font-bold">
+                No orders available
+              </span>
             </td>
           </tr>
         {/each}
