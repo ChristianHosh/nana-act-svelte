@@ -4,7 +4,7 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import Button from "$lib/dui/action/Button.svelte";
-  import {currency} from "$lib/core/util.js";
+  import { currency } from "$lib/core/util.js";
 
   export let data;
 
@@ -29,7 +29,8 @@
   }
 
   function applySearchFilters(prevQuery?: URLSearchParams) {
-    let query = prevQuery || new URLSearchParams();
+    let query =
+      prevQuery || new URLSearchParams($page.url.searchParams.toString());
 
     if (orderFromSearchParam) query.set("order-from", orderFromSearchParam);
     if (orderToSearchParam) query.set("order-to", orderToSearchParam);
@@ -161,10 +162,12 @@
               </a>
             </td>
             <td>
-              <Button linkTo={`/orders/${order.id}`}
-                      icon="mdi:book-open-outline"
-                      color="primary"
-                      circle />
+              <Button
+                linkTo={`/orders/${order.id}`}
+                icon="mdi:book-open-outline"
+                color="primary"
+                circle
+              />
             </td>
           </tr>
         {:else}
@@ -185,39 +188,51 @@
   .badge-ordered {
     background-color: hsl(var(--in));
   }
+
   .badge-processing {
     background-color: hsl(var(--s));
   }
+
   .badge-completed {
     background-color: hsl(var(--su));
   }
+
   .badge-returned {
     background-color: hsl(var(--wa));
   }
+
   .badge-canceled {
     background-color: hsl(var(--er));
   }
+
   .badge-shein {
     background-color: #e7438c;
   }
+
   .badge-iherb {
     background-color: #ec4899;
   }
+
   .badge-asos {
     background-color: #f472b6;
   }
+
   .badge-next {
     background-color: #c026d3;
   }
+
   .badge-amazon {
     background-color: #d946ef;
   }
+
   .badge-modanisa {
     background-color: #e879f9;
   }
+
   .badge-trendiol {
     background-color: #9333ea;
   }
+
   .badge-ladymakeup {
     background-color: #a855f7;
   }
