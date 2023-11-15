@@ -188,7 +188,7 @@
           <td></td>
           <td></td>
           <td colspan=3 class="text-end">
-            Showing {data.currentPage.content.length} orders of {data.currentPage.totalElements}
+            Showing {data.currentPage.content.length} customers of {data.currentPage.totalElements}
           </td>
         </tr>
       </tfoot>
