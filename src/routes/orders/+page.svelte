@@ -17,7 +17,7 @@
   let idParam = $page.url.searchParams.get("id");
   let cityParam = Number($page.url.searchParams.get("city"));
   let customerParam = Number($page.url.searchParams.get("customer"));
-  let siteParam: string | undefined | null = $page.url.searchParams.get("site");
+  let siteParam = $page.url.searchParams.get("site");
 
   let citySearchValue: string;
   let customerSearchValue: string;
