@@ -1,11 +1,14 @@
-// @ts-ignore
-export async function load(event) {
+import type {PageServerLoadEvent} from "../../../.svelte-kit/types/src/routes/test/$types";
+import type {Actions, RequestEvent} from "@sveltejs/kit";
+
+export async function load(event: PageServerLoadEvent) {
+  console.log(event);
 
 }
 
-// @ts-ignore
-export const actions = {
-  default: async (event: any) => {
+export const actions: Actions = {
+  default: async (event: RequestEvent) => {
+    console.log(event);
 
   },
 };
