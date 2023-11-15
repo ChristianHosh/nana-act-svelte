@@ -1,10 +1,8 @@
-import type {
-    LayoutServerLoadEvent,
-} from "../../../../.svelte-kit/types/src/routes/customers/[customerId]/$types";
 import {HttpClient} from "$lib/core/api/axiosInstance";
 import type {CustomerProfile} from "$lib/core/models/customerProfile.model";
 import {AxiosError} from "axios";
 import {fail} from "@sveltejs/kit";
+import type {LayoutServerLoadEvent} from "../../../../../.svelte-kit/types/src/routes/$types";
 
 export async function load(event: LayoutServerLoadEvent) {
     const customerId = event.url.pathname.split("/")[2];

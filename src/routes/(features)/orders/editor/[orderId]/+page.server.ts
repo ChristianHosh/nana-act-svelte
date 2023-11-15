@@ -1,9 +1,9 @@
 import {message, superValidate} from "sveltekit-superforms/server";
 import {type Order, orderSchema} from "$lib/core/models/order.model";
-import type {PageServerLoadEvent} from "../../../../../.svelte-kit/types/src/routes/orders/editor/$types";
 import {HttpClient} from "$lib/core/api/axiosInstance";
 import {AxiosError} from "axios";
 import {fail, redirect, type RequestEvent} from "@sveltejs/kit";
+import type {PageServerLoadEvent} from "../../../../../../.svelte-kit/types/src/routes/$types";
 
 export async function load(event: PageServerLoadEvent) {
     const orderId = event.url.pathname.split("/")[3];

@@ -4,9 +4,8 @@ import type { Pageable } from "$lib/core/models/pageable.model";
 import type { Customer } from "$lib/core/models/customer.model";
 import { AxiosError } from "axios";
 import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from "$lib/core/consts";
-import type { PageServerLoadEvent } from "../../../.svelte-kit/types/src/routes/customers/$types";
+import type {PageServerLoadEvent} from "../../../../.svelte-kit/types/src/routes/$types";
 
-// @ts-ignore
 export async function load(event: PageServerLoadEvent) {
   let page: string = event.url.searchParams.get("page") || DEFAULT_PAGE_INDEX;
   let size: string = event.url.searchParams.get("size") || DEFAULT_PAGE_SIZE;

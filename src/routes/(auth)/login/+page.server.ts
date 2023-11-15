@@ -1,5 +1,5 @@
 import { type Actions, fail, redirect } from "@sveltejs/kit";
-import type {PageServerLoadEvent, RequestEvent} from "../../../.svelte-kit/types/src/routes/login/$types";
+import type {PageServerLoadEvent, RequestEvent} from "../../../../.svelte-kit/types/src/routes/login/$types";
 import { loginSchema } from "$lib/core/models/user.model";
 import {message, superValidate} from "sveltekit-superforms/server";
 import { HttpClient } from "$lib/core/api/axiosInstance";

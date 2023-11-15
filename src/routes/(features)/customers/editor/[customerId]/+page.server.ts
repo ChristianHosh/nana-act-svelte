@@ -1,12 +1,11 @@
-import { fail, redirect, type RequestEvent } from "@sveltejs/kit";
+import {type Actions, fail, redirect, type RequestEvent} from "@sveltejs/kit";
 import { HttpClient } from "$lib/core/api/axiosInstance";
 import { AxiosError } from "axios";
 import type { Customer } from "$lib/core/models/customer.model";
 import { superValidate, message } from "sveltekit-superforms/server";
 import { customerSchema } from "$lib/core/models/customer.model";
-import type { PageServerLoadEvent } from "../../../../../.svelte-kit/types/src/routes/customers/editor/[customerId]/$types";
+import type {PageServerLoadEvent} from "../../../../../../.svelte-kit/types/src/routes/$types";
 
-// @ts-ignore
 export async function load(event: PageServerLoadEvent) {
   const customerId = event.url.pathname.split("/")[3];
   const form = await superValidate(event, customerSchema);
@@ -29,7 +28,7 @@ export async function load(event: PageServerLoadEvent) {
   }
 }
 
-export const actions = {
+export const actions: Actions = {
   default: async (event: RequestEvent) => {
     const customerId = event.url.pathname.split("/")[3];
     const form = await superValidate(event, customerSchema);

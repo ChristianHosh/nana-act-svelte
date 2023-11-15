@@ -1,10 +1,10 @@
 import {fail} from "@sveltejs/kit";
 import { HttpClient } from "$lib/core/api/axiosInstance";
 import { AxiosError } from "axios";
-import type {PageServerLoadEvent} from "../../../../.svelte-kit/types/src/routes/customers/[customerId]/$types";
 import {DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE} from "$lib/core/consts";
 import type {Pageable} from "$lib/core/models/pageable.model";
 import type {Order} from "$lib/core/models/order.model";
+import type {PageServerLoadEvent} from "../../../../../.svelte-kit/types/src/routes/$types";
 
 export async function load(event: PageServerLoadEvent) {
   const customerId = event.url.pathname.split("/")[2];

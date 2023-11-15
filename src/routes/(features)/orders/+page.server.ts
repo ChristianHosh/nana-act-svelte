@@ -4,7 +4,7 @@ import { HttpClient } from "$lib/core/api/axiosInstance";
 import type { Pageable } from "$lib/core/models/pageable.model";
 import type { Order } from "$lib/core/models/order.model";
 import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from "$lib/core/consts";
-import type { PageServerLoadEvent } from "../../../.svelte-kit/types/src/routes/orders/$types";
+import type {PageServerLoadEvent} from "../../../../.svelte-kit/types/src/routes/$types";
 
 export async function load(event: PageServerLoadEvent) {
   let page: string =

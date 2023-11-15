@@ -1,8 +1,8 @@
-import type { PageServerLoadEvent } from "../../../../.svelte-kit/types/src/routes/orders/[orderId]/$types";
 import { HttpClient } from "$lib/core/api/axiosInstance";
 import { AxiosError } from "axios";
 import {fail} from "@sveltejs/kit";
 import type { Order } from "$lib/core/models/order.model";
+import type {PageServerLoadEvent} from "../../../../../.svelte-kit/types/src/routes/$types";
 
 export async function load(event: PageServerLoadEvent) {
   const orderId = event.url.pathname.split("/")[2];
