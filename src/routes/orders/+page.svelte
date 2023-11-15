@@ -15,15 +15,21 @@
 
   export let data;
 
-  $: totalCost = data.currentPage.content.reduce((total, order) => total + order.cost, 0);
-  $: totalProfit = data.currentPage.content.reduce((total, order) => total + order.profit, 0);
-  $: totalCommission = data.currentPage.content.reduce((total, order) => total + order.commission, 0);
+  $: currentPage = data.currentPage;
+
+  $: totalCost = currentPage.content.reduce((total, order) => total + order.cost, 0);
+  $: totalProfit = currentPage.content.reduce((total, order) => total + order.profit, 0);
+  $: totalCommission = currentPage.content.reduce((total, order) => total + order.commission, 0);
 
   let idParam = $page.url.searchParams.get("id");
   let cityParam = Number($page.url.searchParams.get("city"));
   let customerParam = Number($page.url.searchParams.get("customer"));
   let siteParam = $page.url.searchParams.get("site");
   let statusParam = $page.url.searchParams.get("status");
+  let orderFromParam = $page.url.searchParams.get("order-from");
+  let orderToParam = $page.url.searchParams.get("order-to");
+  let shipFromParam = $page.url.searchParams.get("ship-from");
+  let shipToParam = $page.url.searchParams.get("ship-to");
 
   let citySearchValue: string;
   let customerSearchValue: string;
@@ -50,6 +56,10 @@
     if (customerParam) query.set("customer", customerParam.toString());
     if (siteParam) query.set("site", siteParam);
     if (statusParam) query.set("status", statusParam);
+    if (orderFromParam) query.set("order-from", orderFromParam);
+    if (orderToParam) query.set("order-to", orderToParam);
+    if (shipFromParam) query.set("ship-from", shipFromParam);
+    if (shipToParam) query.set("ship-to", shipToParam);
 
     goto(`?${query.toString()}`);
   }
@@ -66,12 +76,20 @@
     siteSearchValue = "";
     statusParam = "";
     statusSearchValue = "";
+    orderFromParam = "";
+    orderToParam = "";
+    shipFromParam = "";
+    shipToParam = "";
 
     query.delete("id");
     query.delete("city");
     query.delete("customer");
     query.delete("site");
     query.delete("status");
+    query.delete("order-from");
+    query.delete("order-to");
+    query.delete("ship-from");
+    query.delete("ship-to");
 
     goto(`?${query.toString()}`);
   }
@@ -132,6 +150,24 @@
           </FormControl>
         </div>
         <div class="flex gap-4">
+          <FormControl field="order-from" class="flex-grow">
+            <span slot="top-label-text">Ordered After</span>
+            <TextInput type="date" name="order-from" bind:value={orderFromParam} />
+          </FormControl>
+          <FormControl field="order-to" class="flex-grow">
+            <span slot="top-label-text">Ordered Before</span>
+            <TextInput type="date" name="order-to" bind:value={orderToParam} />
+          </FormControl>
+          <FormControl field="ship-from" class="flex-grow">
+            <span slot="top-label-text">Shipped After</span>
+            <TextInput type="date" name="ship-from" bind:value={shipFromParam} />
+          </FormControl>
+          <FormControl field="ship-to" class="flex-grow">
+            <span slot="top-label-text">Shipped Before</span>
+            <TextInput type="date" name="ship-to" bind:value={shipToParam} />
+          </FormControl>
+        </div>
+        <div class="flex gap-4">
           <Button
             color="primary"
             icon="mdi:search"
@@ -158,8 +194,8 @@
     <div class="flex justify-between px-4 mb-4">
       <h1 class="text-2xl">Orders</h1>
       <Pagination
-        pageIndex={data.currentPage.number}
-        totalPages={data.currentPage.totalPages}
+        pageIndex={currentPage.number}
+        totalPages={currentPage.totalPages}
         pageSize={25}
         pageSizeOptions={[10, 25, 50]}
         showFirstLastButtons={true}
@@ -183,7 +219,7 @@
         </tr>
       </thead>
       <tbody>
-        {#each data.currentPage.content as order}
+        {#each currentPage.content as order}
           <tr>
             <td>
               <span>{order.id}</span>
@@ -262,7 +298,7 @@
           <td>{currency(totalCommission)}</td>
           <td />
           <td colspan=5  class="text-end">
-            Showing {data.currentPage.content.length} orders of {data.currentPage.totalElements}
+            Showing {currentPage.content.length} orders of {currentPage.totalElements}
           </td>
         </tr>
       </tfoot>
