@@ -17,7 +17,6 @@
   });
 
   function selectSite(site: string) {
-    console.log('selected -> ', site);
     autocompleteSearchValue = site;
     value = site;
     dispatch("valuechange", { value });

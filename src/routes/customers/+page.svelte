@@ -13,6 +13,7 @@
   let nameParam = $page.url.searchParams.get("name");
   let idParam = $page.url.searchParams.get("id");
   let cityParam = Number($page.url.searchParams.get("city"));
+
   let citySearchValue: string;
 
   function onPageChange(event: CustomEvent) {
@@ -47,7 +48,8 @@
 
     query.delete("name");
     query.delete("city");
-    query.delete("id")
+    query.delete("id");
+
     goto(`?${query.toString()}`);
   }
 

@@ -31,7 +31,6 @@
 
     goto(`?${query.toString()}`);
   }
-
 </script>
 
 <div
@@ -135,6 +134,7 @@
   </table>
 </div>
 
+<!--suppress CssUnusedSymbol -->
 <style>
   .badge-ordered {
     background-color: hsl(var(--in));

@@ -7,28 +7,32 @@ import { DEFAULT_PAGE_INDEX, DEFAULT_PAGE_SIZE } from "$lib/core/consts";
 import type { PageServerLoadEvent } from "../../../.svelte-kit/types/src/routes/orders/$types";
 
 export async function load(event: PageServerLoadEvent) {
-  let pageIndex: string =
+  let page: string =
     event.url.searchParams.get("page") || DEFAULT_PAGE_INDEX;
-  let pageSize: string =
+  let size: string =
     event.url.searchParams.get("size") || DEFAULT_PAGE_SIZE;
-  let citySearch: string | null = event.url.searchParams.get("city");
-  let siteSearch: string | null = event.url.searchParams.get("site");
-  let statusSearch: string | null = event.url.searchParams.get("status");
-  let orderFromSearch: string | null = event.url.searchParams.get("order-from");
-  let orderToSearch: string | null = event.url.searchParams.get("order-to");
-  let shipFromSearch: string | null = event.url.searchParams.get("ship-from");
-  let shipToSearch: string | null = event.url.searchParams.get("ship-to");
+  let city: string | null = event.url.searchParams.get("city");
+  let site: string | null = event.url.searchParams.get("site");
+  let status: string | null = event.url.searchParams.get("status");
+  let from_order_date: string | null = event.url.searchParams.get("order-from");
+  let to_order_date: string | null = event.url.searchParams.get("order-to");
+  let from_ship_date: string | null = event.url.searchParams.get("ship-from");
+  let to_ship_date: string | null = event.url.searchParams.get("ship-to");
+  let customer: string | null = event.url.searchParams.get("customer");
+  let id: string | null = event.url.searchParams.get("id");
 
-  let params = {
-    page: pageIndex,
-    size: pageSize,
-    "from-order-date": orderFromSearch,
-    "to-order-date": orderToSearch,
-    "from-ship-date": shipFromSearch,
-    "to-ship-date": shipToSearch,
-    status: statusSearch,
-    site: siteSearch,
-    city: citySearch,
+  const params = {
+    page,
+    size,
+    city,
+    site,
+    status,
+    from_order_date,
+    to_order_date,
+    from_ship_date,
+    to_ship_date,
+    customer,
+    id
   };
 
   try {

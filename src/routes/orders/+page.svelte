@@ -5,17 +5,23 @@
   import { goto } from "$app/navigation";
   import Button from "$lib/dui/action/Button.svelte";
   import { currency } from "$lib/core/util.js";
+  import Collapse from "$lib/dui/data-display/Collapse.svelte";
+  import FormControl from "$lib/dui/data-input/FormControl.svelte";
+  import TextInput from "$lib/dui/data-input/TextInput.svelte";
+  import CityAutocomplete from "$lib/ui/components/CityAutocomplete.svelte";
+  import CustomerAutocomplete from "$lib/ui/components/CustomerAutocomplete.svelte";
+  import SiteAutocomplete from "$lib/ui/components/SiteAutocomplete.svelte";
 
   export let data;
 
-  let orderFromSearchParam: string;
-  let orderToSearchParam: string;
-  let shipFromSearchParam: string;
-  let shipToSearchParam: string;
-  let citySearchParam: string;
+  let idParam = $page.url.searchParams.get("id");
+  let cityParam = Number($page.url.searchParams.get("city"));
+  let customerParam = Number($page.url.searchParams.get("customer"));
+  let siteParam: string | undefined | null = $page.url.searchParams.get("site");
+
   let citySearchValue: string;
-  let statusSearchParam: string;
-  let statusSearchValue: string;
+  let customerSearchValue: string;
+  let siteSearchValue: string;
 
   function onPageChange(event: CustomEvent) {
     let query = new URLSearchParams($page.url.searchParams.toString());
@@ -32,12 +38,10 @@
     let query =
       prevQuery || new URLSearchParams($page.url.searchParams.toString());
 
-    if (orderFromSearchParam) query.set("order-from", orderFromSearchParam);
-    if (orderToSearchParam) query.set("order-to", orderToSearchParam);
-    if (shipFromSearchParam) query.set("ship-from", shipFromSearchParam);
-    if (shipToSearchParam) query.set("ship-to", shipToSearchParam);
-    if (citySearchParam) query.set("city", citySearchParam);
-    if (statusSearchParam) query.set("status", statusSearchParam);
+    if (idParam) query.set("id", idParam);
+    if (cityParam) query.set("city", cityParam.toString());
+    if (customerParam) query.set("customer", customerParam.toString());
+    if (siteParam) query.set("site", siteParam);
 
     goto(`?${query.toString()}`);
   }
@@ -45,21 +49,18 @@
   function resetSearchFilters() {
     let query = new URLSearchParams($page.url.searchParams.toString());
 
-    citySearchParam = "";
+    idParam = "";
     citySearchValue = "";
-    statusSearchParam = "";
-    statusSearchValue = "";
-    orderFromSearchParam = "";
-    orderToSearchParam = "";
-    shipFromSearchParam = "";
-    shipToSearchParam = "";
+    cityParam = 0;
+    customerSearchValue = "";
+    customerParam = 0;
+    siteParam = "";
+    siteSearchValue = "";
 
+    query.delete("id");
     query.delete("city");
-    query.delete("status");
-    query.delete("order-from");
-    query.delete("order-to");
-    query.delete("ship-from");
-    query.delete("ship-to");
+    query.delete("customer");
+    query.delete("site");
 
     goto(`?${query.toString()}`);
   }
@@ -78,6 +79,56 @@
         Create new order
       </Button>
     </div>
+    <Collapse class="overflow-visible" color="base-200" closeable arrow>
+      <span slot="title">Filter Orders</span>
+      <div class="flex flex-col gap-6">
+        <div class="flex gap-4">
+          <FormControl field="id">
+            <span slot="top-label-text">ID</span>
+            <TextInput type="number" name="id" bind:value={idParam} />
+          </FormControl>
+          <FormControl field="city">
+            <span slot="top-label-text">City</span>
+            <CityAutocomplete
+              bind:value={cityParam}
+              bind:autocompleteSearchValue={citySearchValue}
+            />
+          </FormControl>
+          <FormControl field="customer">
+            <span slot="top-label-text">Customer</span>
+            <CustomerAutocomplete
+              bind:value={customerParam}
+              bind:autocompleteSearchValue={customerSearchValue}
+            />
+          </FormControl>
+          <FormControl field="site">
+            <span slot="top-label-text">Site</span>
+            <SiteAutocomplete
+              bind:value={siteParam}
+              bind:autocompleteSearchValue={siteSearchValue}
+            />
+          </FormControl>
+        </div>
+        <div class="flex gap-4">
+          <Button
+            color="primary"
+            icon="mdi:search"
+            outline
+            on:click={() => applySearchFilters()}
+          >
+            Search
+          </Button>
+          <Button
+            color="secondary"
+            icon="mdi:clear-outline"
+            outline
+            on:click={() => resetSearchFilters()}
+          >
+            Clear
+          </Button>
+        </div>
+      </div>
+    </Collapse>
   </div>
   <div
     class="flex flex-col justify-center pt-4 shadow-md shadow-gray-500 bg-base-100/50"
@@ -184,6 +235,7 @@
   </div>
 </div>
 
+<!--suppress CssUnusedSymbol -->
 <style>
   .badge-ordered {
     background-color: hsl(var(--in));

@@ -40,6 +40,9 @@ export const actions: Actions = {
             throw fail(500, { form });
         }
 
-        if (order) throw redirect(307, `/orders/${order.id}`);
+        const forCustomer = event.url.searchParams.get('for-customer');
+
+        if (forCustomer) throw redirect(307, `/customers/${forCustomer}`)
+        if (order) throw redirect(307, `/orders`);
     }
 }

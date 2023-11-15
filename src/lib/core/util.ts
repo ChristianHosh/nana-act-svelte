@@ -5,4 +5,4 @@ const currencyFormatter = new Intl.NumberFormat('en-us', {
     currency: "ILS",
 })
 
-export const currency = currencyFormatter.format;
+export const currency = (value: number | bigint) => {return currencyFormatter.format(value)} ;

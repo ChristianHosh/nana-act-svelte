@@ -71,32 +71,32 @@
             <Stat color="success">
                 <span slot="title">Paid</span>
                 <span slot="value">{currency(customerProfile.paidTotal)}</span>
-                <span slot="description">Total paid amount</span>
+                <span slot="description">Total paid amount, all time</span>
             </Stat>
             <Stat color="error">
                 <span slot="title">Debt</span>
                 <span slot="value">{currency(customerProfile.debtTotal)}</span>
-                <span slot="description">Total unpaid amount</span>
+                <span slot="description">Total unpaid amount, all time</span>
             </Stat>
             <Stat color="info">
                 <span slot="title">Total</span>
                 <span slot="value">{currency(customerProfile.allOrdersTotal)}</span>
-                <span slot="description">All orders total</span>
+                <span slot="description">All orders total, last 30 days</span>
             </Stat>
             <Stat color="accent">
                 <span slot="title">Cost</span>
                 <span slot="value">{currency(customerProfile.allOrdersCost)}</span>
-                <span slot="description">All orders cost</span>
+                <span slot="description">All orders cost, last 30 days</span>
             </Stat>
             <Stat color="primary">
                 <span slot="title">Profit</span>
                 <span slot="value">{currency(customerProfile.allOrdersProfit)}</span>
-                <span slot="description">All orders profit</span>
+                <span slot="description">All orders profit, last 30 days</span>
             </Stat>
             <Stat color="secondary">
                 <span slot="title">Commission</span>
                 <span slot="value">{currency(customerProfile.allOrdersCommission)}</span>
-                <span slot="description">All orders commission</span>
+                <span slot="description">All orders commission, last 30 days</span>
             </Stat>
         </div>
     </div>

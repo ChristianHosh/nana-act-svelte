@@ -35,6 +35,7 @@ export async function load(event: PageServerLoadEvent) {
     customer: customerId,
   };
 
+  console.log('loading page')
   try {
     let pageResponse = await HttpClient.get<Pageable<Order>>(
         "orders",
