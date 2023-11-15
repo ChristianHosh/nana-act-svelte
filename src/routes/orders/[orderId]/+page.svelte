@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { applyAction, enhance } from "$app/forms";
   import Time from "svelte-time";
   import Button from "$lib/dui/action/Button.svelte";
   import {currency} from "$lib/core/util.js";
@@ -98,32 +97,19 @@
         color="secondary"
         outline
         class="capitalize"
+        icon="mdi:pencil-outline"
       >
         Edit '{order.customer.fullName}'s Order'
       </Button>
-      <form
-        method="post"
-        action="?/delete"
-        use:enhance={() => {
-          isDeleting = true;
-          return async ({ result }) => {
-            await applyAction(result);
-          };
-        }}
+      <Button
+        linkTo={`/orders/${order.id}/confirm-delete`}
+        color="error"
+        outline
+        class="capitalize"
+        icon="mdi:delete-outline"
       >
-        <Button
-          color="error"
-          type="submit"
-          loading={isDeleting}
-          loadingIcon="spinner"
-        >
-          {#if isDeleting}
-            Deleting '{order.customer.fullName}'s Order'
-          {:else}
-            Delete '{order.customer.fullName}'s Order'
-          {/if}
-        </Button>
-      </form>
+        Delete '{order.customer.fullName}'s Order'
+      </Button>
     </div>
   </div>
 </div>
