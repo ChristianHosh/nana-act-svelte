@@ -11,6 +11,7 @@
   import CityAutocomplete from "$lib/ui/components/CityAutocomplete.svelte";
   import CustomerAutocomplete from "$lib/ui/components/CustomerAutocomplete.svelte";
   import SiteAutocomplete from "$lib/ui/components/SiteAutocomplete.svelte";
+  import StatusAutocomplete from "$lib/ui/components/StatusAutocomplete.svelte";
 
   export let data;
 
@@ -18,10 +19,12 @@
   let cityParam = Number($page.url.searchParams.get("city"));
   let customerParam = Number($page.url.searchParams.get("customer"));
   let siteParam = $page.url.searchParams.get("site");
+  let statusParam = $page.url.searchParams.get("status");
 
   let citySearchValue: string;
   let customerSearchValue: string;
   let siteSearchValue: string;
+  let statusSearchValue: string;
 
   function onPageChange(event: CustomEvent) {
     let query = new URLSearchParams($page.url.searchParams.toString());
@@ -42,6 +45,7 @@
     if (cityParam) query.set("city", cityParam.toString());
     if (customerParam) query.set("customer", customerParam.toString());
     if (siteParam) query.set("site", siteParam);
+    if (statusParam) query.set("status", statusParam);
 
     goto(`?${query.toString()}`);
   }
@@ -56,11 +60,14 @@
     customerParam = 0;
     siteParam = "";
     siteSearchValue = "";
+    statusParam = "";
+    statusSearchValue = "";
 
     query.delete("id");
     query.delete("city");
     query.delete("customer");
     query.delete("site");
+    query.delete("status");
 
     goto(`?${query.toString()}`);
   }
@@ -83,29 +90,40 @@
       <span slot="title">Filter Orders</span>
       <div class="flex flex-col gap-6">
         <div class="flex gap-4">
-          <FormControl field="id">
+          <FormControl field="id" class="flex-grow">
             <span slot="top-label-text">ID</span>
             <TextInput type="number" name="id" bind:value={idParam} />
           </FormControl>
-          <FormControl field="city">
+          <FormControl field="city" class="flex-grow">
             <span slot="top-label-text">City</span>
             <CityAutocomplete
+              inputStyleClass="w-full"
               bind:value={cityParam}
               bind:autocompleteSearchValue={citySearchValue}
             />
           </FormControl>
-          <FormControl field="customer">
+          <FormControl field="customer" class="flex-grow">
             <span slot="top-label-text">Customer</span>
             <CustomerAutocomplete
+              inputStyleClass="w-full"
               bind:value={customerParam}
               bind:autocompleteSearchValue={customerSearchValue}
             />
           </FormControl>
-          <FormControl field="site">
+          <FormControl field="site" class="flex-grow">
             <span slot="top-label-text">Site</span>
             <SiteAutocomplete
+              inputStyleClass="w-full"
               bind:value={siteParam}
               bind:autocompleteSearchValue={siteSearchValue}
+            />
+          </FormControl>
+          <FormControl field="status" class="flex-grow">
+            <span slot="top-label-text">Status</span>
+            <StatusAutocomplete
+              inputStyleClass="w-full"
+              bind:value={statusParam}
+              bind:autocompleteSearchValue={statusSearchValue}
             />
           </FormControl>
         </div>

@@ -27,7 +27,7 @@
     applySearchFilters(query);
   }
 
-  function applySearchFilters(prevQuery?: URLSearchParams){
+  function applySearchFilters(prevQuery?: URLSearchParams) {
     let query =
       prevQuery || new URLSearchParams($page.url.searchParams.toString());
 
@@ -52,7 +52,6 @@
 
     goto(`?${query.toString()}`);
   }
-
 </script>
 
 <svelte:head>
@@ -72,17 +71,18 @@
       <span slot="title">Filter Customers</span>
       <div class="flex flex-col gap-6">
         <div class="flex gap-4">
-          <FormControl field="id">
+          <FormControl field="id" class="flex-grow">
             <span slot="top-label-text">ID</span>
             <TextInput type="number" name="id" bind:value={idParam} />
           </FormControl>
-          <FormControl field="username">
+          <FormControl field="username" class="flex-grow">
             <span slot="top-label-text">Name or Handle</span>
             <TextInput type="text" name="username" bind:value={nameParam} />
           </FormControl>
-          <FormControl field="city">
+          <FormControl field="city" class="w-1/4">
             <span slot="top-label-text">City</span>
             <CityAutocomplete
+              inputStyleClass="w-full"
               bind:value={cityParam}
               bind:autocompleteSearchValue={citySearchValue}
             />
