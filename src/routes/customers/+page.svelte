@@ -123,7 +123,7 @@
         on:pagechange={(event) => onPageChange(event)}
       />
     </div>
-    <table class="table table-zebra">
+    <table class="table table-zebra table-pin-rows">
       <thead>
         <tr class="text-lg">
           <th>#</th>
@@ -181,6 +181,17 @@
           </tr>
         {/each}
       </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td colspan=3 class="text-end">
+            Showing {data.currentPage.content.length} orders of {data.currentPage.totalElements}
+          </td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </div>

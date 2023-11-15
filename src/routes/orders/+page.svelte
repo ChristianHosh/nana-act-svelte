@@ -15,6 +15,10 @@
 
   export let data;
 
+  $: totalCost = data.currentPage.content.reduce((total, order) => total + order.cost, 0);
+  $: totalProfit = data.currentPage.content.reduce((total, order) => total + order.profit, 0);
+  $: totalCommission = data.currentPage.content.reduce((total, order) => total + order.commission, 0);
+
   let idParam = $page.url.searchParams.get("id");
   let cityParam = Number($page.url.searchParams.get("city"));
   let customerParam = Number($page.url.searchParams.get("customer"));
@@ -162,7 +166,7 @@
         on:pagechange={(event) => onPageChange(event)}
       />
     </div>
-    <table class="table table-zebra">
+    <table class="table table-zebra table-pin-rows">
       <thead>
         <tr class="text-lg">
           <th>#</th>
@@ -249,6 +253,19 @@
           </tr>
         {/each}
       </tbody>
+      <tfoot>
+        <tr>
+          <td>Total</td>
+          <td />
+          <td>{currency(totalCost)}</td>
+          <td>{currency(totalProfit)}</td>
+          <td>{currency(totalCommission)}</td>
+          <td />
+          <td colspan=5  class="text-end">
+            Showing {data.currentPage.content.length} orders of {data.currentPage.totalElements}
+          </td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </div>
