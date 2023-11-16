@@ -276,6 +276,19 @@
           </tr>
         {/each}
       </tbody>
+      <tfoot>
+      <tr>
+        <td>Total</td>
+        <td />
+        <td>{currency(totalCost)}</td>
+        <td>{currency(totalProfit)}</td>
+        <td>{currency(totalCommission)}</td>
+        <td />
+        <td colspan=5  class="text-end">
+          Showing {currentPage.content.length} orders of {currentPage.totalElements}
+        </td>
+      </tr>
+      </tfoot>
     </table>
   </div>
 </div>
