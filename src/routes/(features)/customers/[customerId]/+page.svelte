@@ -184,7 +184,7 @@
       <Paginator
         pageIndex={data.currentPage.number}
         totalPages={data.currentPage.totalPages}
-        pageSize={25}
+        pageSize={10}
         pageSizeOptions={[10, 25, 50]}
         showFirstLastButtons={true}
         on:pagechange={(event) => onPageChange(event)}

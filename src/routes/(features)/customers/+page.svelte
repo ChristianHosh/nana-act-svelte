@@ -118,7 +118,7 @@
         pageIndex={data.currentPage.number}
         totalPages={data.currentPage.totalPages}
         pageSize={25}
-        pageSizeOptions={[10, 25, 50]}
+        pageSizeOptions={[10, 25, 50, 100]}
         showFirstLastButtons
         on:pagechange={(event) => onPageChange(event)}
       />

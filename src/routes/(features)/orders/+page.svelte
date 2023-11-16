@@ -197,7 +197,7 @@
         pageIndex={currentPage.number}
         totalPages={currentPage.totalPages}
         pageSize={25}
-        pageSizeOptions={[10, 25, 50]}
+        pageSizeOptions={[10, 25, 50, 100]}
         showFirstLastButtons={true}
         on:pagechange={(event) => onPageChange(event)}
       />

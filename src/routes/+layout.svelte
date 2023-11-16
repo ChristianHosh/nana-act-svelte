@@ -12,6 +12,6 @@
 
 <Header />
 
-<div class="px-4 mt-2">
+<div class="px-4 pt-2 pb-4">
   <slot />
 </div>
