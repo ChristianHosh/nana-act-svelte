@@ -100,23 +100,9 @@
       </Stat>
     </div>
   </div>
-  <div>
-    <div
-      class="mb-2 py-4 px-2 bg-neutral-content shadow shadow-black flex flex-col gap-4"
-    >
-      <div class="flex">
-        <Button
-          linkTo={`/orders/editor?for-customer=${customer.id}&customer=${customer.fullName}`}
-          color="primary"
-          icon="mdi:add"
-        >
-          Create new order
-        </Button>
-      </div>
-    </div>
 
-    <slot />
-  </div>
+  <slot />
+
   <div class="rounded border-error border-2 px-4 py-2">
     <h3 class="text-2xl mb-2">Danger Zone</h3>
     <div class="flex gap-4">

@@ -7,34 +7,33 @@ import type {Order} from "$lib/core/models/order.model";
 import type {PageServerLoadEvent} from "../../../../../.svelte-kit/types/src/routes/$types";
 
 export async function load(event: PageServerLoadEvent) {
-  const customerId = event.url.pathname.split("/")[2];
+  const customer = event.url.pathname.split("/")[2];
 
-  let pageIndex: string =
+  let page: string =
       event.url.searchParams.get("page") || DEFAULT_PAGE_INDEX;
-  let pageSize: string =
+  let size: string =
       event.url.searchParams.get("size") || DEFAULT_PAGE_SIZE;
-  let citySearch: string | null = event.url.searchParams.get("city");
-  let siteSearch: string | null = event.url.searchParams.get("site");
-  let statusSearch: string | null = event.url.searchParams.get("status");
-  let orderFromSearch: string | null = event.url.searchParams.get("order-from");
-  let orderToSearch: string | null = event.url.searchParams.get("order-to");
-  let shipFromSearch: string | null = event.url.searchParams.get("ship-from");
-  let shipToSearch: string | null = event.url.searchParams.get("ship-to");
+  let site: string | null = event.url.searchParams.get("site");
+  let status: string | null = event.url.searchParams.get("status");
+  let from_order_date: string | null = event.url.searchParams.get("order-from");
+  let to_order_date: string | null = event.url.searchParams.get("order-to");
+  let from_ship_date: string | null = event.url.searchParams.get("ship-from");
+  let to_ship_date: string | null = event.url.searchParams.get("ship-to");
+  let id: string | null = event.url.searchParams.get("id");
 
-  let params = {
-    page: pageIndex,
-    size: pageSize,
-    "from-order-date": orderFromSearch,
-    "to-order-date": orderToSearch,
-    "from-ship-date": shipFromSearch,
-    "to-ship-date": shipToSearch,
-    status: statusSearch,
-    site: siteSearch,
-    city: citySearch,
-    customer: customerId,
+  const params = {
+    page,
+    size,
+    site,
+    status,
+    from_order_date,
+    to_order_date,
+    from_ship_date,
+    to_ship_date,
+    customer,
+    id
   };
 
-  console.log('loading page')
   try {
     let pageResponse = await HttpClient.get<Pageable<Order>>(
         "orders",

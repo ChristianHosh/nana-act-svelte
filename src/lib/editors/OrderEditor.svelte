@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { Order, OrderSchema } from "$lib/core/models/order.model";
   import {dateProxy, intProxy, superForm} from "sveltekit-superforms/client";
-  import SuperDebug from "sveltekit-superforms/client/SuperDebug.svelte";
   import { orderSchema } from "$lib/core/models/order.model";
   import Icon from "@iconify/svelte";
   import FormControl from "$lib/dui/data-input/FormControl.svelte";
@@ -66,7 +65,6 @@
 </script>
 
 <div class="flex justify-center mt-8">
-  <SuperDebug data={$form} />
   <div class="w-1/2 rounded bg-neutral-content">
     <div class="py-4 px-8 border-1 border-b border-b-neutral-700">
       <h2 class="text-3xl uppercase">
