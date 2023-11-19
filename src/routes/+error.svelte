@@ -1,5 +1,10 @@
 <script>
     import { page } from '$app/stores';
+    import {goto} from "$app/navigation";
+
+    if ($page.status === 401){
+        goto("/login")
+    }
 </script>
 
 <svelte:head>

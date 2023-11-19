@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Order, OrderSchema } from "$lib/core/models/order.model";
-  import {dateProxy, intProxy, superForm} from "sveltekit-superforms/client";
+  import { dateProxy, intProxy, superForm } from "sveltekit-superforms/client";
   import { orderSchema } from "$lib/core/models/order.model";
   import Icon from "@iconify/svelte";
   import FormControl from "$lib/dui/data-input/FormControl.svelte";
@@ -9,7 +9,8 @@
   import TextInput from "$lib/dui/data-input/TextInput.svelte";
   import Range from "$lib/dui/data-input/Range.svelte";
   import SiteAutocomplete from "$lib/ui/components/SiteAutocomplete.svelte";
-  import {page} from "$app/stores";
+  import { page } from "$app/stores";
+  import TextArea from "$lib/dui/data-input/TextArea.svelte";
 
   export let data;
   export let order: Order | undefined = undefined;
@@ -35,7 +36,7 @@
   const costProxy = intProxy(form, "cost");
   const profitProxy = intProxy(form, "profit");
   const commissionProxy = intProxy(form, "commission");
-  const orderDateProxy = dateProxy(form, 'orderDate', { format: 'date' });
+  const orderDateProxy = dateProxy(form, "orderDate", { format: "date" });
 
   $form.usePercentage = false;
   $form.profitPercentage = 0.05;
@@ -56,9 +57,9 @@
     siteAutocompleteSearch = order.site.toString();
   }
 
-  const forCustomer = $page.url.searchParams.get('for-customer');
-  const forCustomerName = $page.url.searchParams.get('customer');
-  if (forCustomer && forCustomerName){
+  const forCustomer = $page.url.searchParams.get("for-customer");
+  const forCustomerName = $page.url.searchParams.get("customer");
+  if (forCustomer && forCustomerName) {
     $form.customerId = Number(forCustomer);
     customerAutocompleteSearch = forCustomerName;
   }
@@ -207,6 +208,20 @@
           <span slot="bottom-label-text" class="text-error">
             {#if $errors?.commission}
               {$errors?.commission[0]}
+            {/if}
+          </span>
+        </FormControl>
+        <FormControl field="note">
+          <span slot="top-label-text">Note</span>
+          <TextArea
+            name="note"
+            bind:value={$form.note}
+            color={$errors.note ? "error" : ""}
+            aria-invalid={$errors.note ? true : undefined}
+          />
+          <span slot="bottom-label-text" class="text-error">
+            {#if $errors?.note}
+              {$errors?.note[0]}
             {/if}
           </span>
         </FormControl>
